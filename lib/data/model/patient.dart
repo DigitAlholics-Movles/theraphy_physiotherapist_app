@@ -1,12 +1,12 @@
 class Patient{
-    String id;
-    String userId;
+    int id;
+    int userId;
     String firstName;
     String lastName;
-    String age;
+    int age;
     String birthdayDate;
     String email;
-    String appointmentQuantity;
+    int appointmentQuantity;
     String photoUrl;
 
   Patient({

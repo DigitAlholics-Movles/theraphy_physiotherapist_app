@@ -3,7 +3,7 @@ import 'package:theraphy_physiotherapist_app/data/model/physiotherapist.dart';
 
 class Appointment{
 
-    String id;
+    int id;
     Patient patient;
     Physiotherapist physiotherapist;
     String scheduledDate;
@@ -25,8 +25,8 @@ class Appointment{
  Appointment.fromJson(Map<String, dynamic> json)
       : this(
             id: json['id'],
-            patient: json['patient'],
-            physiotherapist: json['physiotherapist'],
+            patient: Patient.fromJson(json['patient']),
+             physiotherapist: Physiotherapist.fromJson(json['physiotherapist']),
             scheduledDate: json['scheduledDate'],
             topic: json['topic'],
             done: json['done'],

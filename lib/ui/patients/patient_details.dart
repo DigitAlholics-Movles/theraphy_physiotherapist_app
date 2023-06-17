@@ -1,6 +1,8 @@
 
 import 'package:theraphy_physiotherapist_app/data/model/patient.dart';
 import 'package:flutter/material.dart';
+import 'package:theraphy_physiotherapist_app/ui/patients/patients_list.dart';
+
 
 class PatientDetails extends StatefulWidget {
   const PatientDetails({super.key, required this.patient});
@@ -11,7 +13,16 @@ class PatientDetails extends StatefulWidget {
 }
 
 class _PatientDetailsState extends State<PatientDetails> {
-  
+int selectedIndex = 1;
+
+  List<Widget> pages = const [
+    PatientsList(),
+    PatientsList(),
+    PatientsList(),
+    PatientsList(),
+    PatientsList(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,14 +43,24 @@ class _PatientDetailsState extends State<PatientDetails> {
       ),
       
       body: Column(
-  children: [Center(
-              child: Image.network(
-              widget.patient.photoUrl,
-              width: 300, // Establece el ancho deseado para la imagen
-              height: 300, // Establece la altura deseada para la imagen
-               ),
+  children: [
+              const SizedBox(height: 20),
+              Center(
+              child: Container(
+                constraints: const BoxConstraints(
+                  minWidth: 200.0,  
+                  minHeight: 200.0, // Establece el ancho mínimo deseado
+                  maxWidth: 200.0,
+                  maxHeight: 200.0,  // Establece el ancho máximo deseado
+                ),
+                child: Image(
+                  image: NetworkImage(widget.patient.photoUrl),
+                  fit: BoxFit.cover, // Ajusta la imagen al tamaño del contenedor
+                ),
+              ),
             ),
-
+            
+            const SizedBox(height: 20),
             Center(
             child: Column(
               children: [
@@ -93,7 +114,7 @@ class _PatientDetailsState extends State<PatientDetails> {
                         ),
                       ),
                       Text(
-                        widget.patient.age,
+                        widget.patient.age.toString(),
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -123,7 +144,7 @@ class _PatientDetailsState extends State<PatientDetails> {
                         ),
                       ),
                       Text(
-                        widget.patient.appointmentQuantity,
+                        widget.patient.appointmentQuantity.toString(),
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -165,8 +186,15 @@ class _PatientDetailsState extends State<PatientDetails> {
 
                 const SizedBox(height: 25),
                     ElevatedButton(
-                  onPressed: () {
-                    // Acción a realizar al presionar el botón
+                  onPressed: () {/*
+                    Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyAppointments(
+            
+                    ),
+                  ),
+                );*/
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -193,7 +221,74 @@ class _PatientDetailsState extends State<PatientDetails> {
         ],
       ),
 
-
+    bottomNavigationBar: Container(
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: const BorderRadius.vertical(
+      top: Radius.circular(10.0),
+    ),
+    border: Border.all(
+      color: Colors.black,
+      width: 1.0,
+    ),
+  ),
+  child: ClipRRect(
+    borderRadius: const BorderRadius.vertical(
+      top: Radius.circular(10.0),
+    ),
+    child: BottomNavigationBar(
+      currentIndex: selectedIndex,
+      onTap: (index) {
+        setState(() {
+          selectedIndex = index;
+        });
+         Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => pages[index]),
+        );
+      },
+      unselectedItemColor: const Color.fromARGB(255, 104, 104, 104),
+      selectedItemColor: Colors.black,
+      items: [
+        BottomNavigationBarItem(
+          icon: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child:  const Icon(Icons.home),
+          ),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child:  const Icon(Icons.people),
+          ),
+          label: 'Patients',
+        ),
+        BottomNavigationBarItem(
+          icon: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: const Icon(Icons.calendar_month),
+          ),
+          label: 'Appointments',
+        ),
+        BottomNavigationBarItem(
+          icon: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: const Icon(Icons.video_collection),
+          ),
+          label: 'Treatments',
+        ),
+        BottomNavigationBarItem(
+          icon: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child:  const Icon(Icons.person),
+          ),
+          label: 'Profile',
+        ),
+      ],
+    ),
+  ),
+),
     );
   }
 }

@@ -1,16 +1,16 @@
 class Physiotherapist{
-    String id;
-    String userId;
+    int id;
+    int userId;
     String firstName;
     String paternalSurname;
     String maternalSurname;
     String specialization;
-    String age;
+    int age;
     String location;
     String birthdayDate;
     String email;
-    String rating;
-    String consultationsQuantity;
+    double rating;
+    int consultationsQuantity;
     String photoUrl;
 
   Physiotherapist({
