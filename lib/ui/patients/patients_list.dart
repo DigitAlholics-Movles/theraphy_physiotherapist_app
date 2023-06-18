@@ -103,7 +103,6 @@ class _PatientsListState extends State<PatientsList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 20,
         title: const Text("My Patients", 
         style: TextStyle(color: Colors.black),),
         backgroundColor: Colors.white,
