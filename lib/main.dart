@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:theraphy_physiotherapist_app/ui/initial_views/login.dart';
+import 'package:theraphy_physiotherapist_app/ui/initial_views/sign_up.dart';
 
 void main() {
   runApp(const MainApp()); 
