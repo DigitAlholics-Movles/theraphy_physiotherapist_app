@@ -24,7 +24,7 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
             child: Text(
               'Today appointments',
               style: TextStyle(
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.bold, fontSize: 20
               ),
             ),
           ),
@@ -39,7 +39,7 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
             child: Text(
               'My patients',
               style: TextStyle(
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.bold, fontSize: 20
               ),
             ),
           ),
@@ -49,7 +49,7 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
           SizedBox(
             child: PatientItem(),
           ),
-          
+          Spacer(),
           SizedBox(
             child: PatientItem(),
           ),
