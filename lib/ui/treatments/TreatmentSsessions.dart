@@ -34,6 +34,19 @@ class _ListTreatmentsState extends State<ListTreatments> {
     Treatment(title: 'Electroterapia', sessionsQuantity: 6, imageLink: 'https://www.metropolsalud.com/wp-content/uploads/2021/07/diatermia.jpg', description: 'La electroterapia es una técnica que utiliza corrientes eléctricas de baja intensidad para aliviar el dolor, reducir la inflamación y promover la recuperación de lesiones. Los fisioterapeutas utilizan diferentes modalidades de electroterapia, como la estimulación muscular, la terapia de ondas de choque o la terapia con corrientes interferenciales, según las necesidades del paciente.'),
   ];
 
+  List<Treatment> get filteredTreatments {
+    // Obtener la lista de tratamientos filtrados en función del texto de búsqueda
+    if (searchText.isEmpty) {
+      return treatments; // Si no hay texto de búsqueda, mostrar todos los tratamientos
+    } else {
+      return treatments.where((treatment) {
+        final titleLower = treatment.title.toLowerCase();
+        final queryLower = searchText.toLowerCase();
+        return titleLower.contains(queryLower);
+      }).toList();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,12 +80,12 @@ class _ListTreatmentsState extends State<ListTreatments> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 15.0,
                   crossAxisSpacing: 36.0,
-                  childAspectRatio: 0.8,
+                  childAspectRatio: 0.74,
                 ),
-                itemCount: treatments.length,
+                itemCount: filteredTreatments.length, // Usar la lista de tratamientos filtrados
                 itemBuilder: (BuildContext context, int index) {
                   return TreatmentItem(
-                    treatment: treatments[index],
+                    treatment: filteredTreatments[index],
                     selectTreatment: () {
                       // Acción al seleccionar el tratamiento
                     },
@@ -180,9 +193,15 @@ class TreatmentItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.network(
-              treatment.imageLink,
-              height: 90,
+            Padding(
+              padding: const EdgeInsets.only(top: 2.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(5.0), // Ajusta el radio de borde según tus necesidades
+                child: Image.network(
+                  treatment.imageLink,
+                  height: 90,
+                ),
+              ),
             ),
             const SizedBox(height: 15),
             Text(
@@ -211,9 +230,10 @@ class TreatmentItem extends StatelessWidget {
               },
               child: const Text('Información'),
             ),
-          ],  
+          ],
         ),
       ),
     );
   }
 }
+

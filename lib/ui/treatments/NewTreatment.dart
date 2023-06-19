@@ -15,7 +15,7 @@ class _NewTreatmentState extends State<NewTreatment> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _sessionsController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final int maxDescriptionLength = 500; // Límite máximo de caracteres para la descripción
+  final int maxDescriptionLength = 500;
   final ScrollController _descriptionScrollController = ScrollController();
   PickedFile? _selectedImage;
 
@@ -35,7 +35,7 @@ class _NewTreatmentState extends State<NewTreatment> {
   }
 
   void updateDescriptionCount() {
-    setState(() {}); // Actualiza el estado para refrescar el contador de caracteres
+    setState(() {});
     if (_descriptionController.selection.extentOffset >= maxDescriptionLength) {
       _descriptionScrollController.jumpTo(_descriptionScrollController.position.maxScrollExtent);
     }
@@ -45,7 +45,8 @@ class _NewTreatmentState extends State<NewTreatment> {
   Widget build(BuildContext context) {
     Widget buildSelectedImage() {
       if (_selectedImage != null) {
-        return Image.file(File(_selectedImage!.path));
+        final file = File(_selectedImage!.path);
+        return Image.file(file);
       } else {
         return Text('No image selected');
       }
@@ -55,108 +56,165 @@ class _NewTreatmentState extends State<NewTreatment> {
       appBar: AppBar(
         title: const Text('Add New Treatment'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ElevatedButton(
-              onPressed: () async {
-                final imagePicker = ImagePicker();
-                final image = await imagePicker.getImage(source: ImageSource.gallery);
-                setState(() {
-                  _selectedImage = image;
-                });
-              },
-              child: const Text('Select Image'),
-            ),
-            const SizedBox(height: 16.0),
-            buildSelectedImage(),
-            const SizedBox(height: 16.0),
-            const Text(
-              'Title',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.left, // Align the text to the left
-            ),
-            const SizedBox(height: 6),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(),
-                borderRadius: BorderRadius.circular(4.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12.0, 0.5, 8.0, 0),
-                child: TextField(
-                  controller: _titleController,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(16.0, 1.0, 16.0, 15.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16.0),
+              Center(
+                child: Container(
+                  width: 308,
+                  height: 175,
+                  child: Stack(
+                    children: [
+                      _selectedImage != null
+                          ? Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: FileImage(File(_selectedImage!.path)),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      )
+                          : Container(),
+                      ElevatedButton(
+                        onPressed: () async {
+                          final imagePicker = ImagePicker();
+                          final image = await imagePicker.getImage(source: ImageSource.gallery);
+                          setState(() {
+                            _selectedImage = image;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(309, 222),
+                          padding: EdgeInsets.zero,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          elevation: 0,
+                          primary: Colors.transparent,
+                        ),
+                        child: _selectedImage != null
+                            ? Container()
+                            : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.image,
+                              size: 100,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(height: 8.0),
+                            const Text(
+                              'Select Image',
+                              style: TextStyle(fontSize: 18, color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16.0),
-            const Text(
-              'Description',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+              const SizedBox(height: 10.0),
+              const Text(
+                'Title',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.left, // Align the text to the left
               ),
-              textAlign: TextAlign.left, // Align the text to the left
-            ),
-            const SizedBox(height: 6),
-            SizedBox(
-              width: 507, // Ancho personalizado
-              height: 120, // Alto personalizado
-              child: buildDescriptionField(),
-            ),
-            const SizedBox(height: 16.0),
-            const Text(
-              'Sessions Quantity',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.left, // Align the text to the left
-            ),
-            const SizedBox(height: 6),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(),
-                borderRadius: BorderRadius.circular(4.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12.0, 0.5, 8.0, 0),
-                child: TextField(
-                  controller: _sessionsController,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
+              const SizedBox(height: 6),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 0.5, 8.0, 0),
+                  child: TextField(
+                    controller: _titleController,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                    ),
                   ),
-                  keyboardType: TextInputType.number,
                 ),
               ),
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () {
-                final String title = _titleController.text;
-                final int sessionsQuantity = int.parse(_sessionsController.text);
-                final String description = _descriptionController.text;
+              const SizedBox(height: 10.0),
+              const Text(
+                'Description',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.left, // Align the text to the left
+              ),
+              const SizedBox(height: 6),
+              SizedBox(
+                width: 507, // Ancho personalizado
+                height: 120, // Alto personalizado
+                child: buildDescriptionField(),
+              ),
+              const SizedBox(height: 10.0),
+              const Text(
+                'Sessions Quantity',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.left, // Align the text to the left
+              ),
+              const SizedBox(height: 3),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 0.5, 8.0, 0),
+                  child: TextField(
+                    controller: _sessionsController,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      final String title = _titleController.text;
+                      final int sessionsQuantity = int.parse(_sessionsController.text);
+                      final String description = _descriptionController.text;
 
-                final newTreatment = Treatment(
-                  title: title,
-                  sessionsQuantity: sessionsQuantity,
-                  imageLink: _selectedImage!= null ? File(_selectedImage!.path).path : '',
-                  description: description,
-                );
+                      final newTreatment = Treatment(
+                        title: title,
+                        sessionsQuantity: sessionsQuantity,
+                        imageLink: _selectedImage != null ? File(_selectedImage!.path).path : '',
+                        description: description,
+                      );
 
-                Navigator.pop(context, newTreatment);
-              },
-              child: const Text('Add Treatment'),
-            ),
-          ],
+                      Navigator.pop(context, newTreatment);
+                    },
+                    child: const Text('Add Treatment'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Navegar hacia atrás sin pasar datos
+                    },
+                    child: const Text('Cancelar'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
