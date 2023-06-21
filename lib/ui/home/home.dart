@@ -235,13 +235,15 @@ class _PatientListState extends State<PatientList> {
       appBar: AppBar(
         title: const Text('AppSuperZound'),
       ),
-      body: ListView.builder(
-        
-        itemBuilder: (context, index) {
+      body: const Column(
+        children: [
+          Text('adsafs')
+        ],
+        /*itemBuilder: (context, index) {
           //return PatientItem(album: albums![index]);
-        },
+        },*/
       ),
-    );;
+    );
   }
 }
 

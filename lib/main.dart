@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-//import 'package:theraphy_physiotherapist_app/ui/home/home.dart';
 import 'package:theraphy_physiotherapist_app/ui/profile/physiotherapist_profile.dart';
 
 

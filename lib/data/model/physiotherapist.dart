@@ -1,21 +1,23 @@
 class Physiotherapist {
   int id;
+  int userId;
   String firstName;
   String paternalSurname;
   String maternalSurname;
   int age;
-  int rating;
+  double rating;
   String location;
   String photoUrl;
   String birthdayDate;
   int consultationsQuantity;
   String specialization;
   String email;
-  int userId;
+  
 
 
   Physiotherapist(
       {required this.id,
+      required this.userId,
       required this.firstName,
       required this.paternalSurname,
       required this.maternalSurname,
@@ -27,12 +29,13 @@ class Physiotherapist {
       required this.consultationsQuantity,
       required this.specialization,
       required this.email,
-      required this.userId,
+      
       });
 
   Physiotherapist.fromJson(Map<String, dynamic> json)
       : this(
           id: json['id'],
+          userId: json['userId'],
           firstName: json['firstName'],
           paternalSurname: json['paternalSurname'],
           maternalSurname: json['maternalSurname'],
@@ -44,7 +47,7 @@ class Physiotherapist {
           consultationsQuantity: json['consultationsQuantity'],
           specialization: json ['specialization'],
           email: json['email'],
-          userId: json['userId']
+          
         );
   
 }
