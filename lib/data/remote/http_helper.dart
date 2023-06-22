@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:theraphy_physiotherapist_app/data/model/appointment.dart';
 import 'package:theraphy_physiotherapist_app/data/model/physiotherapist.dart';
+import 'package:theraphy_physiotherapist_app/data/model/treatment.dart';
 
 import '../model/patient.dart';
 
@@ -86,6 +87,22 @@ Future<List<Appointment>?> getAppointments() async {
       final List<dynamic> appointmentsMap = jsonResponse['content'];
       final List<Appointment> appointments = appointmentsMap.map((map) => Appointment.fromJson(map)).toList();
       return appointments;
+    } else {
+      return null;
+    }
+}
+
+Future<List<Treatment>?> getTreatments() async {
+    const String endpoint = '/treatments';
+    final String url = '$urlBase$endpoint';
+
+    http.Response response = await http.get(Uri.parse(url));
+
+    if(response.statusCode == HttpStatus.ok){
+      final jsonResponse = json.decode(response.body);
+      final List<dynamic> treatmentsMap = jsonResponse['content'];
+      final List<Treatment> treatments = treatmentsMap.map((map) => Treatment.fromJson(map)).toList();
+      return treatments;
     } else {
       return null;
     }

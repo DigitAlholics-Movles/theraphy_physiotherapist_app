@@ -3,6 +3,7 @@ import 'package:theraphy_physiotherapist_app/data/model/appointment.dart';
 
 import '../../data/model/patient.dart';
 import '../../data/model/physiotherapist.dart';
+import '../../data/model/treatment.dart';
 import '../../data/remote/http_helper.dart';
 
 class HomePhysiotherapist extends StatefulWidget {
@@ -19,22 +20,29 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
   List<Appointment>? appointments;
   List<Physiotherapist>? physiotherapists;
   List<Physiotherapist>? physioterapist;
-  Physiotherapist? selectedPhysiotherapist;
+  List<Treatment>? treatments;
   HttpHelper? httpHelper;
-  int userLogged = 1;
+  int userLogged = 4;
+  String physiotherapistName = '';
 
   Future initialize() async {
     appointments = List.empty();
     physiotherapists = List.empty();
+    treatments = List.empty();
 
     appointments = await httpHelper?.getAppointments();
     physiotherapists = await httpHelper?.getPhysiotherapist();
+    treatments = await httpHelper?.getTreatments();
+    physiotherapistName = getPhysiotherapistNameById(userLogged);
+    
+    
 
     //appointments = await httpHelper?.getAppointments();
     //appointments = await httpHelper?.getAppointmentsByPhysiotherapist(2);
     setState(() {
       appointments = appointments;
       physiotherapists = physiotherapists;
+      treatments = treatments;
     });
   }
 
@@ -69,6 +77,24 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
     return null;
   }
 
+  int countTreatmentsByPhysiotherapistId(int physiotherapistId) {
+  if (treatments != null) {
+    int treatmentCount = treatments!
+        .where((treatment) => treatment.physiotherapist.id == physiotherapistId)
+        .length;
+
+    print('Number of treatments for physiotherapist $physiotherapistId: $treatmentCount');
+
+    return treatmentCount;
+  }
+  return 0;
+}
+
+String getPhysiotherapistNameById(int physiotherapistId) {
+  Physiotherapist? physiotherapist = physiotherapists!.firstWhere((physiotherapist) => physiotherapist.id == physiotherapistId);
+  return physiotherapist.firstName;
+}
+  
   @override
   void initState() {
     super.initState();
@@ -81,11 +107,13 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
     List<Appointment>? filteredAppointments =
             getAndAppointmentsByPhysiotherapistId(userLogged),
         filteredAppointments2 = getPatientsByPhysiotherapistId(userLogged);
+        int treatmentCount = countTreatmentsByPhysiotherapistId(userLogged);
     // Filtrar citas para el fisioterapeuta con ID 1
     // String physiotherapistName = getPhysiotherapistNameById(userLogged); // Obtener el nombre del fisioterapeuta con ID 3
 
     return Scaffold(
-        appBar: AppBar(title: const Text('Hola')),
+        appBar: AppBar(title: 
+         Text(physiotherapistName)),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,21 +200,21 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(25.0),
+                          child:  Padding(
+                            padding: const EdgeInsets.all(25.0),
                             child: Column(
                               children: [
                                 Text(
-                                  '15',
+                                  '$treatmentCount',
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(
+                                  style: const  TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 40),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
-                                Text('Treatments count'),
+                                const Text('Treatments count'),
                               ],
                             ),
                           ),
