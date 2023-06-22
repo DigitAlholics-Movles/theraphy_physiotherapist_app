@@ -1,54 +1,84 @@
 //import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:theraphy_physiotherapist_app/data/model/patient.dart';
+import 'package:theraphy_physiotherapist_app/data/model/physiotherapist.dart';
+
 import 'package:theraphy_physiotherapist_app/ui/initial_views/sign_up.dart';
 import 'package:flutter/material.dart';
+import 'package:theraphy_physiotherapist_app/data/model/user.dart';
+
+import '../../data/model/physiotherapist.dart';
+import '../../data/remote/http_helper.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 //import 'package:flutter_icons/flutter_icons.dart';
 
-class User {
-  final String email;
-  final String password;
-  final String type;
-  final int id;
-
-  User({
-    required this.email,
-    required this.password,
-    required this.type,
-    required this.id,
-  });
-}
-
 class Login extends StatefulWidget {
-
   const Login({super.key});
-  
-  
 
   @override
   State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  
-
   bool _passwordVisible = false;
   bool _errorState = false;
 
-  
-
+  String email = "";
+  String password = "";
 
   TextEditingController? _usernameController;
   TextEditingController? _passwordController;
- 
+
+  HttpHelper? httpHelper;
+  List<Physiotherapist>? physioterapists = [];
+  List<Patient>? patients = [];
+  List<User>? users = [];
+
+  void saveData(String key, String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(key, value);
+    //print('Valor guardado en el almacenamiento local.');
+  }
+
+  void getData(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? value = prefs.getString(key);
+    print('Valor recuperado del almacenamiento local: $value');
+  }
+
+  Future initialize() async {
+    physioterapists = List.empty();
+    physioterapists = await httpHelper?.getPhysiotherapist();
+
+    setState(() {
+      physioterapists = physioterapists;
+    });
+
+    patients = List.empty();
+    patients = await httpHelper?.getPatients();
+    setState(() {
+      patients = patients;
+    });
+
+    users = List.empty();
+    users = await httpHelper?.getUsers();
+    setState(() {
+      users = users;
+    });
+  }
 
   @override
   void initState() {
-  
+    httpHelper = HttpHelper();
+
+    initialize();
+
     _usernameController = TextEditingController();
     _passwordController = TextEditingController();
 
-    getUsername();
     super.initState();
   }
 
@@ -68,24 +98,15 @@ class _LoginState extends State<Login> {
         ((route) => false));
   }
 
-  login() async {
-    
-  }
+  login() async {}
 
-  getUsername() async {
-  
+  getUsername() async {}
 
-  }
-
-  signOut() async {
-   
-  }
+  signOut() async {}
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
-   
 
     // ...
 
@@ -123,7 +144,9 @@ class _LoginState extends State<Login> {
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
                     controller: _usernameController,
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      email = value;
+                    },
                     decoration: InputDecoration(
                       labelText: 'Email',
                       border: OutlineInputBorder(
@@ -157,6 +180,9 @@ class _LoginState extends State<Login> {
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
                     obscureText: !_passwordVisible,
+                    onChanged: (value) {
+                      password = value;
+                    },
                     decoration: InputDecoration(
                       labelText: 'Password',
                       border: OutlineInputBorder(
@@ -194,9 +220,6 @@ class _LoginState extends State<Login> {
               ),
             ],
           ),
-
-          
-
           Padding(
             padding: EdgeInsets.only(top: 10, right: 20),
             child: Align(
@@ -210,21 +233,56 @@ class _LoginState extends State<Login> {
               ),
             ),
           ),
-
-
           SizedBox(height: 20),
-
           Container(
             width: double.infinity,
             margin: EdgeInsets.symmetric(horizontal: 20),
             child: ElevatedButton(
               onPressed: () {
+                bool found = false;
+                users?.forEach((element) {
+                  if (element.email == email && element.password == password) {
+                    found = true;
+                    print(element.id);
+                    saveData("userId", element.id.toString());
+                    //getData("userId");
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          //////////////////
+                          //MARIAAAA AQUI PONES EL HOMEEEEEEE
+                          //////////////
+                          builder: (context) => const SignUp(),
+                        ));
+                  }
+                });
+                if (!found) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Error'),
+                        content: Text('Your email or password is incorrect'),
+                        actions: [
+                          TextButton(
+                            child: Text('Close'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+
                 // Acción a realizar al presionar el botón
               },
               style: ElevatedButton.styleFrom(
                 primary: Colors.blue[700], // Color de fondo
                 onPrimary: Colors.white, // Color del texto
-                padding: EdgeInsets.symmetric(vertical: 20), // Padding vertical del botón
+                padding: EdgeInsets.symmetric(
+                    vertical: 20), // Padding vertical del botón
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -238,9 +296,7 @@ class _LoginState extends State<Login> {
               ),
             ),
           ),
-
           SizedBox(height: 20),
-
           Row(
             children: [
               Expanded(
@@ -275,11 +331,7 @@ class _LoginState extends State<Login> {
               ),
             ],
           ),
-
           SizedBox(height: 10),
-
-
-
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Container(
@@ -292,7 +344,8 @@ class _LoginState extends State<Login> {
                 style: ElevatedButton.styleFrom(
                   primary: Colors.blue[700], // Color de fondo
                   onPrimary: Colors.white, // Color del texto
-                  padding: EdgeInsets.symmetric(vertical: 20), // Padding vertical del botón
+                  padding: EdgeInsets.symmetric(
+                      vertical: 20), // Padding vertical del botón
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -307,17 +360,16 @@ class _LoginState extends State<Login> {
               ),
             ),
           ),
-
           Container(
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(vertical: 20),
             child: TextButton(
               onPressed: () {
                 Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SignUp(),
-                ));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SignUp(),
+                    ));
                 // Acción a realizar al presionar el botón
               },
               child: RichText(
@@ -344,119 +396,5 @@ class _LoginState extends State<Login> {
         ],
       ),
     );
-
-
-
-
-
-
-
-    
-    /*return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: ClipOval(
-                  child: Image.asset(
-                    'assets/logotheraphy.png',
-                    width: 250,
-                    //height: size.height * 0.35,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: size.width * 0.90,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(8.0),
-                        filled: true,
-                        fillColor: Theme.of(context).secondaryHeaderColor,
-                        prefixIcon: const Icon(
-                          Icons.person,
-                        ),
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(30),
-                          ),
-                        ),
-                        hintText: 'Username'),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: size.width * 0.90,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(8.0),
-                        filled: true,
-                        fillColor: Theme.of(context).secondaryHeaderColor,
-                        prefixIcon: const Icon(
-                          Icons.lock,
-                        ),
-                        suffixIcon: const Icon(Icons.visibility),
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(30),
-                          ),
-                        ),
-                        hintText: 'Password'),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: size.width * 0.85,
-                child: ElevatedButton(
-                  onPressed: () {
-                    login();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: const Text('Sign in'),
-                ),
-              ),
-              SizedBox(
-                width: size.width * 0.85,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SignUp(),
-                        ));
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: const Text('Sign up'),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  signOut();
-                },
-                child: const Text('Forgot password?'),
-              )
-            ],
-          ),
-        ),
-      ),
-    );*/
   }
 }
