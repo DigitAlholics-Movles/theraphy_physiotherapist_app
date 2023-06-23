@@ -1,8 +1,6 @@
-
 import 'package:theraphy_physiotherapist_app/data/model/patient.dart';
 import 'package:flutter/material.dart';
 import 'package:theraphy_physiotherapist_app/ui/patients/patients_list.dart';
-
 
 class PatientDetails extends StatefulWidget {
   const PatientDetails({super.key, required this.patient});
@@ -13,7 +11,7 @@ class PatientDetails extends StatefulWidget {
 }
 
 class _PatientDetailsState extends State<PatientDetails> {
-int selectedIndex = 1;
+  int selectedIndex = 1;
 
   List<Widget> pages = const [
     PatientsList(),
@@ -29,39 +27,40 @@ int selectedIndex = 1;
       appBar: AppBar(
         titleSpacing: -10,
         title: const Text(
-          "Patient Profile", 
-        style: TextStyle(color: Colors.black),
+          "Patient Profile",
+          style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
         leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios),
-        color: Colors.black,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
+          icon: const Icon(Icons.arrow_back_ios),
+          color: Colors.black,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
-      ),
-      
       body: Column(
-  children: [
-              const SizedBox(height: 20),
-              Center(
-              child: Container(
-                constraints: const BoxConstraints(
-                  minWidth: 200.0,  
-                  minHeight: 200.0, // Establece el ancho mínimo deseado
-                  maxWidth: 200.0,
-                  maxHeight: 200.0,  // Establece el ancho máximo deseado
-                ),
-                child: Image(
-                  image: NetworkImage(widget.patient.photoUrl),
-                  fit: BoxFit.cover, // Ajusta la imagen al tamaño del contenedor
-                ),
+        children: [
+          const SizedBox(height: 20),
+          Center(
+            child: Container(
+              constraints: const BoxConstraints(
+                minWidth: 200.0,
+                minHeight: 200.0, // Establece el ancho mínimo deseado
+                maxWidth: 200.0,
+                maxHeight: 200.0, // Establece el ancho máximo deseado
+              ),
+              child:  Image(
+                image: NetworkImage(
+                  widget.patient.photoUrl
+                  ),
+                fit: BoxFit.cover, // Ajusta la imagen al tamaño del contenedor
               ),
             ),
-            
-            const SizedBox(height: 20),
-            Center(
+          ),
+
+          const SizedBox(height: 20),
+          Center(
             child: Column(
               children: [
                 Container(
@@ -71,7 +70,8 @@ int selectedIndex = 1;
                   ),
                   padding: const EdgeInsets.all(10),
                   constraints: const BoxConstraints(
-                    minWidth: 300, // Establece el ancho máximo deseado para el cuadro
+                    minWidth:
+                        300, // Establece el ancho máximo deseado para el cuadro
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +101,8 @@ int selectedIndex = 1;
                   ),
                   padding: const EdgeInsets.all(10),
                   constraints: const BoxConstraints(
-                    minWidth: 300, // Establece el ancho máximo deseado para el cuadro
+                    minWidth:
+                        300, // Establece el ancho máximo deseado para el cuadro
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +132,8 @@ int selectedIndex = 1;
                   ),
                   padding: const EdgeInsets.all(10),
                   constraints: const BoxConstraints(
-                    minWidth: 300, // Establece el ancho máximo deseado para el cuadro
+                    minWidth:
+                        300, // Establece el ancho máximo deseado para el cuadro
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,7 +163,8 @@ int selectedIndex = 1;
                   ),
                   padding: const EdgeInsets.all(10),
                   constraints: const BoxConstraints(
-                    minWidth: 300, // Establece el ancho máximo deseado para el cuadro
+                    minWidth:
+                        300, // Establece el ancho máximo deseado para el cuadro
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,10 +186,10 @@ int selectedIndex = 1;
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 25),
-                    ElevatedButton(
-                  onPressed: () {/*
+                ElevatedButton(
+                  onPressed: () {
+                    /*
                     Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -199,8 +202,10 @@ int selectedIndex = 1;
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
-                    ), backgroundColor: Colors.blue,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    ),
+                    backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                   ),
                   child: const Text(
                     'Medical appointments',
@@ -209,86 +214,81 @@ int selectedIndex = 1;
                       color: Colors.white,
                     ),
                   ),
-                  )
-
+                )
               ],
-            
-            
-            
             ),
           ),
           // Aquí puedes agregar más contenido si es necesario
         ],
       ),
-
-    bottomNavigationBar: Container(
-  decoration: BoxDecoration(
-    color: Colors.white,
-    borderRadius: const BorderRadius.vertical(
-      top: Radius.circular(10.0),
-    ),
-    border: Border.all(
-      color: Colors.black,
-      width: 1.0,
-    ),
-  ),
-  child: ClipRRect(
-    borderRadius: const BorderRadius.vertical(
-      top: Radius.circular(10.0),
-    ),
-    child: BottomNavigationBar(
-      currentIndex: selectedIndex,
-      onTap: (index) {
-        setState(() {
-          selectedIndex = index;
-        });
-         Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => pages[index]),
-        );
-      },
-      unselectedItemColor: const Color.fromARGB(255, 104, 104, 104),
-      selectedItemColor: Colors.black,
-      items: [
-        BottomNavigationBarItem(
-          icon: ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child:  const Icon(Icons.home),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(10.0),
           ),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child:  const Icon(Icons.people),
+          border: Border.all(
+            color: Colors.black,
+            width: 1.0,
           ),
-          label: 'Patients',
         ),
-        BottomNavigationBarItem(
-          icon: ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child: const Icon(Icons.calendar_month),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(10.0),
           ),
-          label: 'Appointments',
-        ),
-        BottomNavigationBarItem(
-          icon: ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child: const Icon(Icons.video_collection),
+          child: BottomNavigationBar(
+            currentIndex: selectedIndex,
+            onTap: (index) {
+              setState(() {
+                selectedIndex = index;
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => pages[index]),
+              );
+            },
+            unselectedItemColor: const Color.fromARGB(255, 104, 104, 104),
+            selectedItemColor: Colors.black,
+            items: [
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.home),
+                ),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.people),
+                ),
+                label: 'Patients',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.calendar_month),
+                ),
+                label: 'Appointments',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.video_collection),
+                ),
+                label: 'Treatments',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.person),
+                ),
+                label: 'Profile',
+              ),
+            ],
           ),
-          label: 'Treatments',
         ),
-        BottomNavigationBarItem(
-          icon: ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child:  const Icon(Icons.person),
-          ),
-          label: 'Profile',
-        ),
-      ],
-    ),
-  ),
-),
+      ),
     );
   }
 }
