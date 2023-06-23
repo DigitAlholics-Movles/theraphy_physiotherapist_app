@@ -1,26 +1,41 @@
 class Patient{
     int id;
-    int userId;
     String firstName;
     String lastName;
     int age;
-    String birthdayDate;
-    String email;
-    int appointmentQuantity;
     String photoUrl;
-
+    String birthdayDate;
+    int appointmentQuantity;
+    String email;
+    int userId;
+    
+    
   Patient({
     required this.id,
-    required this.userId,
     required this.firstName,
     required this.lastName,
     required this.age,
+    required this.photoUrl,
     required this.birthdayDate,
-    required this.email,
     required this.appointmentQuantity,
-    required this.photoUrl
+    required this.email,
+    required this.userId
   });
   
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'firstName': firstName,
+      'lastName': lastName,
+      'age': age,
+      'photoUrl': photoUrl,
+      'birthdayDate': birthdayDate,
+      'appointmentQuantity': appointmentQuantity,
+      'email': email,
+      'userId': userId,
+    };
+  }
+
    Patient.fromJson(Map<String, dynamic> json)
       : this(
             id: json['id'],
