@@ -28,20 +28,4 @@ class Appointment {
             topic: json['topic'],
             done: json['done'],
             diagnosis: json['diagnosis']);
-
-  // void setData(String data1) {
-  //   diagnosis = data1;
-  // }
-
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     'diagnosis': diagnosis,
-  //   };
-  // }
-
-  // Future<void> update(int id) async {
-  //   final httpHelper = HttpHelper();
-  //   await httpHelper.updatePost(id);
-  //   // Realizar acciones adicionales después de la actualización
-  // }
 }
