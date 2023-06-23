@@ -35,4 +35,5 @@ class Treatment{
       physiotherapistId: json['physiotherapistId'] ?? 0, // Corregir la clave a 'physiotherapistId'
       photoUrl: json['photoUrl']
     );
+
 }
