@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:theraphy_physiotherapist_app/ui/home/home.dart';
-import 'package:theraphy_physiotherapist_app/ui/profile/physiotherapist_profile.dart';
-
-
+import 'package:theraphy_physiotherapist_app/ui/initial_views/login.dart';
+import 'package:theraphy_physiotherapist_app/ui/initial_views/sign_up.dart';
 
 void main() {
   runApp(const MainApp()); 
@@ -14,7 +12,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: HomePhysiotherapist(),
+      home: Login() 
     );
   }
 }
