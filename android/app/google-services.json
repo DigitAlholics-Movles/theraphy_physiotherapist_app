@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "47089776550",
+    "project_id": "image-host-da1c2",
+    "storage_bucket": "image-host-da1c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47089776550:android:857dbd721fecd5b71ec167",
+        "android_client_info": {
+          "package_name": "com.example.theraphy_physiotherapist_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "47089776550-v772bfvlr2pqbto04aia3205f87irtkv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-47xV3Z2vSCr48Z2RHx7AbWdws9Nlb3o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "47089776550-v772bfvlr2pqbto04aia3205f87irtkv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
