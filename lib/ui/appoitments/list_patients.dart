@@ -7,6 +7,7 @@ import 'package:theraphy_physiotherapist_app/data/remote/http_helper.dart';
 import '../home/home.dart';
 import '../patients/patients_list.dart';
 import '../profile/physiotherapist_profile.dart';
+import '../treatments/TreatmentSsessions.dart';
 
 class ListAppointments extends StatefulWidget {
   const ListAppointments({super.key});
@@ -29,7 +30,7 @@ class _ListAppointmentsState extends State<ListAppointments> {
     HomePhysiotherapist(),
     PatientsList(),
     ListAppointments(),
-    PatientsList(),
+    ListTreatments(),
     PhysiotherapistProfile(),
   ];
 
@@ -106,6 +107,7 @@ class _ListAppointmentsState extends State<ListAppointments> {
         ),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

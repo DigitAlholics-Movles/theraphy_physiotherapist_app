@@ -12,7 +12,9 @@ class TreatmentInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(treatmentName),
+        title: Text(treatmentName, style: TextStyle(color: Colors.black)),backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

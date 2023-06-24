@@ -8,6 +8,7 @@ import 'package:theraphy_physiotherapist_app/ui/patients/patient_details.dart';
 import '../appoitments/list_patients.dart';
 import '../home/home.dart';
 import '../profile/physiotherapist_profile.dart';
+import '../treatments/TreatmentSsessions.dart';
 
 class PatientsList extends StatefulWidget {
   const PatientsList({super.key});
@@ -24,7 +25,7 @@ class _PatientsListState extends State<PatientsList> {
     HomePhysiotherapist(),
     PatientsList(),
     ListAppointments(),
-    PatientsList(),
+    ListTreatments(),
     PhysiotherapistProfile(),
   ];
 
@@ -107,6 +108,7 @@ class _PatientsListState extends State<PatientsList> {
         ),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
+        elevation: 0,
       ),
       body: Column(
         children: [
