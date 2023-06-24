@@ -88,6 +88,7 @@ class _PhysiotherapistProfileState extends State<PhysiotherapistProfile> {
         ),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
+        automaticallyImplyLeading: false,
         elevation: 0,
       ),
         body: profileItem,

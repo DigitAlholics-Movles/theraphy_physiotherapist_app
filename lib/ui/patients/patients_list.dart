@@ -108,6 +108,7 @@ class _PatientsListState extends State<PatientsList> {
         ),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
+        automaticallyImplyLeading: false,
         elevation: 0,
       ),
       body: Column(
@@ -288,7 +289,7 @@ class _PatientItemState extends State<PatientItem> {
               const SizedBox(height: 50),
               const SizedBox(width: 8),
               SizedBox(
-                width: 140,
+                width: 120,
                 height: 30, // Establece el ancho deseado para el botón
                 child: ElevatedButton(
                   onPressed: () {
@@ -311,7 +312,7 @@ class _PatientItemState extends State<PatientItem> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Appointments Quantity: ${widget.patient.appointmentQuantity}",
+                      "N Appointments: ${widget.patient.appointmentQuantity}",
                       style: const TextStyle(
                         color: Colors.blue,
                         fontSize:

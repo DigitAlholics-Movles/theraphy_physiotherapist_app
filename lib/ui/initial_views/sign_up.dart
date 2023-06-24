@@ -420,7 +420,7 @@ class _SignUpState extends State<SignUp> {
                                       "2000-01-01",
                                       0,
                                       email,
-                                      users![users!.length-1].id + 1);
+                                      users![users!.length - 1].id + 1);
                                 } else {
                                   String firstName = "";
                                   String paternalSurname = "";
@@ -452,7 +452,7 @@ class _SignUpState extends State<SignUp> {
                                       0,
                                       email,
                                       5,
-                                      users![users!.length-1].id + 1);
+                                      users![users!.length - 1].id + 1);
                                 }
 
                                 Navigator.push(

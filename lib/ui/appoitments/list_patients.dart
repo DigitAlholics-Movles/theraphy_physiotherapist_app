@@ -106,7 +106,7 @@ class _ListAppointmentsState extends State<ListAppointments> {
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
+        automaticallyImplyLeading: false,
         elevation: 0,
       ),
       body: Padding(
@@ -416,6 +416,7 @@ class _MyAppointmentState extends State<MyAppointment> {
         ),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -572,74 +573,6 @@ class _MyAppointmentState extends State<MyAppointment> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(10.0),
-          ),
-          border: Border.all(
-            color: Colors.black,
-            width: 1.0,
-          ),
-        ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(10.0),
-          ),
-          child: BottomNavigationBar(
-            currentIndex: selectedIndex,
-            onTap: (int index) {
-              setState(() {
-                selectedIndex = index;
-              });
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => pages[index]),
-              );
-            },
-            unselectedItemColor: const Color.fromARGB(255, 104, 104, 104),
-            selectedItemColor: Colors.black,
-            items: [
-              BottomNavigationBarItem(
-                icon: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: const Icon(Icons.home),
-                ),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: const Icon(Icons.people),
-                ),
-                label: 'Patients',
-              ),
-              BottomNavigationBarItem(
-                icon: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: const Icon(Icons.calendar_month),
-                ),
-                label: 'Appointments',
-              ),
-              BottomNavigationBarItem(
-                icon: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: const Icon(Icons.video_collection),
-                ),
-                label: 'Treatments',
-              ),
-              BottomNavigationBarItem(
-                icon: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: const Icon(Icons.person),
-                ),
-                label: 'Profile',
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+        );
   }
 }
