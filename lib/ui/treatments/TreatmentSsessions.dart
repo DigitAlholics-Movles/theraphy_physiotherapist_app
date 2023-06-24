@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:theraphy_physiotherapist_app/data/model/treatment.dart';
-import 'package:theraphy_physiotherapist_app/data/remote/http_helper.dart';
 import 'package:theraphy_physiotherapist_app/ui/treatments/NewTreatment.dart';
 import 'package:theraphy_physiotherapist_app/ui/treatments/TreatmenteInfo.dart';
+
+class Treatment {
+  final String title;
+  final int sessionsQuantity;
+  final String imageLink;
+  final String description;
+
+  Treatment({
+    required this.title,
+    required this.sessionsQuantity,
+    required this.imageLink,
+    required this.description,
+  });
+}
 
 class ListTreatments extends StatefulWidget {
   const ListTreatments({Key? key}) : super(key: key);
@@ -15,25 +27,12 @@ class _ListTreatmentsState extends State<ListTreatments> {
   String searchText = '';
   int _currentIndex = 0;
 
-  List<Treatment> treatments = [];
-
-  @override
-  void initState() {
-    super.initState();
-    loadTreatments(); // Carga los tratamientos al inicializar el estado
-  }
-
-  Future<void> loadTreatments() async {
-    // Utiliza la clase HttpHelper para obtener los tratamientos
-    final httpHelper = HttpHelper();
-    final fetchedTreatments = await httpHelper.getTreatment();
-
-    if (fetchedTreatments != null) {
-      setState(() {
-        treatments = fetchedTreatments;
-      });
-    }
-  }
+  List<Treatment> treatments = [
+    Treatment(title: 'Lesion de rodilla', sessionsQuantity: 10, imageLink: 'https://i.blogs.es/0710f8/650_1000_cinesiterapia/1366_2000.jpg', description: 'Una lesión de rodilla es un problema doloroso y limitante que afecta la articulación central de la pierna. Puede ser causada por movimientos bruscos, caídas o impactos directos en la rodilla. Los síntomas comunes incluyen dolor, hinchazón, rigidez y dificultad para mover la rodilla. El tratamiento puede incluir terapia física, medicamentos y, en casos graves, cirugía. Es importante buscar atención médica para obtener un diagnóstico preciso y un plan de tratamiento adecuado. El descanso, hielo, compresión y elevación pueden ayudar a controlar el dolor y la inflamación antes de recibir atención médica.'),
+    Treatment(title: 'Acupuntura', sessionsQuantity: 8, imageLink: 'https://www.il3.ub.edu/blog/wp-content/uploads/2021/09/iStock-1251542995.jpg', description: 'La terapia de acupuntura es una técnica utilizada por los fisioterapeutas para aliviar el dolor y promover la curación. Se insertan agujas delgadas en puntos específicos del cuerpo para estimular los mecanismos de autocuración del organismo. La acupuntura puede ser utilizada como complemento en el tratamiento de diversas condiciones musculoesqueléticas y dolor crónico.'),
+    Treatment(title: 'Vendaje neuromuscular', sessionsQuantity: 12, imageLink: 'https://www.virgendelalcazar.com/wp-content/uploads/2018/05/camilla_traccion.jpg', description: 'La terapia de vendaje neuromuscular, también conocida como kinesiotaping, es una técnica utilizada por los fisioterapeutas para proporcionar soporte, estabilidad y alivio del dolor en áreas específicas del cuerpo. Se aplican cintas elásticas especiales sobre la piel en patrones específicos para estimular la función muscular, mejorar la circulación y promover la recuperación.'),
+    Treatment(title: 'Electroterapia', sessionsQuantity: 6, imageLink: 'https://www.metropolsalud.com/wp-content/uploads/2021/07/diatermia.jpg', description: 'La electroterapia es una técnica que utiliza corrientes eléctricas de baja intensidad para aliviar el dolor, reducir la inflamación y promover la recuperación de lesiones. Los fisioterapeutas utilizan diferentes modalidades de electroterapia, como la estimulación muscular, la terapia de ondas de choque o la terapia con corrientes interferenciales, según las necesidades del paciente.'),
+  ];
 
   List<Treatment> get filteredTreatments {
     // Obtener la lista de tratamientos filtrados en función del texto de búsqueda
@@ -199,7 +198,7 @@ class TreatmentItem extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(5.0), // Ajusta el radio de borde según tus necesidades
                 child: Image.network(
-                  treatment.photoUrl,
+                  treatment.imageLink,
                   height: 90,
                 ),
               ),
@@ -226,7 +225,7 @@ class TreatmentItem extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => TreatmentInfo(treatmentName: treatment.title, treatmentImage: treatment.photoUrl, treatmentDescription: treatment.description)),
+                  MaterialPageRoute(builder: (context) => TreatmentInfo(treatmentName: treatment.title, treatmentImage: treatment.imageLink, treatmentDescription: treatment.description)),
                 );
               },
               child: const Text('Información'),
@@ -237,3 +236,4 @@ class TreatmentItem extends StatelessWidget {
     );
   }
 }
+
