@@ -1,9 +1,8 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:theraphy_physiotherapist_app/data/model/treatment.dart';
-import 'package:theraphy_physiotherapist_app/data/remote/http_helper.dart';
-import 'package:theraphy_physiotherapist_app/data/remote/uploatImage.dart';
+import 'package:theraphy_physiotherapist_app/ui/treatments/TreatmentSsessions.dart';
 
 class NewTreatment extends StatefulWidget {
   const NewTreatment({Key? key}) : super(key: key);
@@ -19,7 +18,6 @@ class _NewTreatmentState extends State<NewTreatment> {
   final int maxDescriptionLength = 500;
   final ScrollController _descriptionScrollController = ScrollController();
   PickedFile? _selectedImage;
-  final HttpHelper httpHelper = HttpHelper();
 
   @override
   void dispose() {
@@ -39,23 +37,8 @@ class _NewTreatmentState extends State<NewTreatment> {
   void updateDescriptionCount() {
     setState(() {});
     if (_descriptionController.selection.extentOffset >= maxDescriptionLength) {
-      _descriptionScrollController
-          .jumpTo(_descriptionScrollController.position.maxScrollExtent);
+      _descriptionScrollController.jumpTo(_descriptionScrollController.position.maxScrollExtent);
     }
-  }
-
-  Future<List<Treatment>?> addTreatment(
-      Treatment newTreatment, int physiotherapistId) async {
-    final List<Treatment>? updatedTreatments =
-        await httpHelper.addTreatment(newTreatment, physiotherapistId);
-
-    if (updatedTreatments != null) {
-      // Tratamiento agregado exitosamente, haz algo con los tratamientos actualizados
-    } else {
-      // Ocurrió un error al agregar el tratamiento
-    }
-
-    return updatedTreatments;
   }
 
   @override
@@ -88,19 +71,18 @@ class _NewTreatmentState extends State<NewTreatment> {
                     children: [
                       _selectedImage != null
                           ? Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: FileImage(File(_selectedImage!.path)),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            )
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: FileImage(File(_selectedImage!.path)),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      )
                           : Container(),
                       ElevatedButton(
                         onPressed: () async {
                           final imagePicker = ImagePicker();
-                          final image = await imagePicker.getImage(
-                              source: ImageSource.gallery);
+                          final image = await imagePicker.getImage(source: ImageSource.gallery);
                           setState(() {
                             _selectedImage = image;
                           });
@@ -117,21 +99,20 @@ class _NewTreatmentState extends State<NewTreatment> {
                         child: _selectedImage != null
                             ? Container()
                             : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.image,
-                                    size: 100,
-                                    color: Colors.grey,
-                                  ),
-                                  const SizedBox(height: 8.0),
-                                  const Text(
-                                    'Select Image',
-                                    style: TextStyle(
-                                        fontSize: 18, color: Colors.black),
-                                  ),
-                                ],
-                              ),
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.image,
+                              size: 100,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(height: 8.0),
+                            const Text(
+                              'Select Image',
+                              style: TextStyle(fontSize: 18, color: Colors.black),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -208,35 +189,25 @@ class _NewTreatmentState extends State<NewTreatment> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed: () async {
+                    onPressed: () {
                       final String title = _titleController.text;
-                      final int sessionsQuantity =
-                          int.parse(_sessionsController.text);
+                      final int sessionsQuantity = int.parse(_sessionsController.text);
                       final String description = _descriptionController.text;
 
-                      final String? imageUrl =
-                          await uploadImage(File(_selectedImage!.path));
-
                       final newTreatment = Treatment(
-                        id: 0,
                         title: title,
                         sessionsQuantity: sessionsQuantity,
-                        physiotherapistId: 1,
+                        imageLink: _selectedImage != null ? File(_selectedImage!.path).path : '',
                         description: description,
-                        photoUrl: imageUrl ??
-                            '', // Asignar la URL de la imagen o una cadena vacía si no hay imagen seleccionada
                       );
 
-                      addTreatment(
-                          newTreatment, newTreatment.physiotherapistId);
-                      Navigator.pop(context);
+                      Navigator.pop(context, newTreatment);
                     },
                     child: const Text('Add Treatment'),
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(
-                          context); // Navegar hacia atrás sin pasar datos
+                      Navigator.pop(context); // Navegar hacia atrás sin pasar datos
                     },
                     child: const Text('Cancelar'),
                   ),
@@ -258,21 +229,25 @@ class _NewTreatmentState extends State<NewTreatment> {
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(12.0, 0.5, 8.0, 0),
+            padding: const EdgeInsets.fromLTRB(12.0, 6.0, 8.0, 0),
             child: TextField(
               controller: _descriptionController,
-              maxLines: null,
               decoration: const InputDecoration(
                 border: InputBorder.none,
               ),
+              maxLines: 4,
+              scrollController: _descriptionScrollController,
+              keyboardType: TextInputType.multiline,
             ),
           ),
           Positioned(
-            bottom: 0,
-            right: 4,
+            bottom: 8.0,
+            right: 12.0,
             child: Text(
               '${_descriptionController.text.length}/$maxDescriptionLength',
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
+              style: TextStyle(
+                color: _descriptionController.text.length > maxDescriptionLength ? Colors.red : Colors.grey,
+              ),
             ),
           ),
         ],

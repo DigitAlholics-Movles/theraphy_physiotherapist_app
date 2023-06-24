@@ -1,15 +1,8 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:theraphy_physiotherapist_app/firebase_options.dart';
 import 'package:theraphy_physiotherapist_app/ui/initial_views/login.dart';
 import 'package:theraphy_physiotherapist_app/ui/initial_views/sign_up.dart';
-import 'package:theraphy_physiotherapist_app/ui/treatments/TreatmentSsessions.dart';
 
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );
+void main() {
   runApp(const MainApp()); 
 }
 
