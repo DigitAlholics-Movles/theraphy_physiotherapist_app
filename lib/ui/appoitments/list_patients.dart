@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theraphy_physiotherapist_app/data/model/appointment.dart';
 import 'package:theraphy_physiotherapist_app/data/model/patient.dart';
 import 'package:theraphy_physiotherapist_app/data/remote/http_helper.dart';
+
+import '../home/home.dart';
+import '../patients/patients_list.dart';
+import '../profile/physiotherapist_profile.dart';
 
 class ListAppointments extends StatefulWidget {
   const ListAppointments({super.key});
@@ -12,13 +17,32 @@ class ListAppointments extends StatefulWidget {
 
 class _ListAppointmentsState extends State<ListAppointments> {
   String searchText = '';
-  int _currentIndex = 0;
-  int selectedIndex = 1;
+  int _currentIndex = 2;
+  int selectedIndex = 2;
   int currentUser = 3;
   List<Patient>? patients = [];
-  List<Patient>? myPatients = [];
+  List<Appointment>? myAppointments = [];
   List<Appointment>? appointments = [];
   HttpHelper? httpHelper;
+
+  List<Widget> pages = const [
+    HomePhysiotherapist(),
+    PatientsList(),
+    ListAppointments(),
+    PatientsList(),
+    PhysiotherapistProfile(),
+  ];
+
+  Future<int> getData(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? value = prefs.getString(key);
+    if (value != null) {
+    int? parsedValue = int.tryParse(value);
+    currentUser = parsedValue ?? 0;
+    }
+    return currentUser;
+    //print('Valor recuperado del almacenamiento local: $value');
+  }
 
   final List<Widget> _screens = [
     // Aquí puedes agregar tus pantallas adicionales
@@ -26,16 +50,10 @@ class _ListAppointmentsState extends State<ListAppointments> {
   ];
 
   Future initialize() async {
-    bool equalElement(int number) {
-      if (myPatients != null) {
-        for (var patient in myPatients!) {
-          if (patient.id == number) {
-            return false;
-          }
-        }
-      }
-      return true;
-    }
+    currentUser = await getData("userId") as int;
+
+
+    
 
     // ignore: sdk_version_since
     patients = List.empty();
@@ -53,14 +71,11 @@ class _ListAppointmentsState extends State<ListAppointments> {
 
     appointments?.forEach((appointment) {
       if (appointment.physiotherapist.id == currentUser) {
-        patients?.forEach((patient) {
-          if (patient.id == appointment.patient.id &&
-              equalElement(patient.id)) {
-            myPatients?.add(patient);
-          }
-        });
+        myAppointments?.add(appointment);
       }
     });
+
+    appointments = myAppointments;
 
     //filteredPatients = myPatients;
   }
@@ -85,7 +100,12 @@ class _ListAppointmentsState extends State<ListAppointments> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Appointments'),
+        title: const Text(
+          "My Appointments",
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -128,20 +148,23 @@ class _ListAppointmentsState extends State<ListAppointments> {
                             width: 50,
                             height: 50,
                           ), // Ruta de la imagen
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment
-                                .spaceEvenly, // Centra los elementos horizontalmente
-                            children: [
-                              Text(appointments![index].patient.firstName),
-                              Text(appointments![index].patient.lastName),
-                              const SizedBox(
-                                width: 10,
-                              ), // Espacio entre los elementos
-                            ],
+                          title: Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment
+                                  .start, // Centra los elementos horizontalmente
+                              children: [
+                                Text("${appointments![index].patient.firstName} ${appointments![index].patient.lastName}"),
+                               
+                                const SizedBox(
+                                  width: 10,
+                                ), // Espacio entre los elementos
+                              ],
+                            ),
                           ),
                           subtitle: Row(
                             mainAxisAlignment: MainAxisAlignment
-                                .center, // Centra los elementos horizontalmente
+                                .start, // Centra los elementos horizontalmente
                             children: [
                               Container(
                                 padding: const EdgeInsets.all(5),
@@ -205,44 +228,72 @@ class _ListAppointmentsState extends State<ListAppointments> {
           ],
         ),
       ),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(10.0),
-        ), // Ajusta el radio de las esquinas según tus preferencias
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (int index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          items: const [
-            BottomNavigationBarItem(
-              backgroundColor: Colors.transparent, // Fondo transparente
-              icon: Icon(Icons.home),
-              label: 'Inicio',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.transparent, // Fondo transparente
-              icon: Icon(Icons.people),
-              label: 'People',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.transparent, // Fondo transparente
-              icon: Icon(Icons.calendar_month),
-              label: 'Calendar',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.transparent, // Fondo transparente
-              icon: Icon(Icons.video_settings),
-              label: 'Video',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.transparent, // Fondo transparente
-              icon: Icon(Icons.person),
-              label: 'Person',
-            ),
-          ],
+     bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(10.0),
+          ),
+          border: Border.all(
+            color: Colors.black,
+            width: 1.0,
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(10.0),
+          ),
+          child: BottomNavigationBar(
+            currentIndex: selectedIndex,
+            onTap: (int index) {
+              setState(() {
+                selectedIndex = index;
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => pages[index]),
+              );
+            },
+            unselectedItemColor: const Color.fromARGB(255, 104, 104, 104),
+            selectedItemColor: Colors.black,
+            items: [
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.home),
+                ),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.people),
+                ),
+                label: 'Patients',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.calendar_month),
+                ),
+                label: 'Appointments',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.video_collection),
+                ),
+                label: 'Treatments',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.person),
+                ),
+                label: 'Profile',
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -260,12 +311,20 @@ class MyAppointment extends StatefulWidget {
 class _MyAppointmentState extends State<MyAppointment> {
   String searchText = '';
   int _currentIndex = 0;
-  int selectedIndex = 1;
+  int selectedIndex = 2;
   int currentUser = 3;
   List<Patient>? patients = [];
   List<Patient>? myPatients = [];
   List<Appointment>? appointments = [];
   HttpHelper? httpHelper;
+
+  List<Widget> pages = const [
+    HomePhysiotherapist(),
+    PatientsList(),
+    ListAppointments(),
+    PatientsList(),
+    PhysiotherapistProfile(),
+  ];
 
   final List<Widget> _screens = [
     // Aquí puedes agregar tus pantallas adicionales
@@ -349,7 +408,12 @@ class _MyAppointmentState extends State<MyAppointment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("My appointments"),
+        title: const Text(
+          "My Appointments",
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -506,44 +570,72 @@ class _MyAppointmentState extends State<MyAppointment> {
           ],
         ),
       ),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(
-                10.0)), // Ajusta el radio de las esquinas según tus preferencias
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (int index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          items: const [
-            BottomNavigationBarItem(
-              backgroundColor: Colors.transparent, // Fondo transparente
-              icon: Icon(Icons.home),
-              label: 'Inicio',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.transparent, // Fondo transparente
-              icon: Icon(Icons.people),
-              label: 'People',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.transparent, // Fondo transparente
-              icon: Icon(Icons.calendar_month),
-              label: 'Calendar',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.transparent, // Fondo transparente
-              icon: Icon(Icons.video_settings),
-              label: 'Video',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.transparent, // Fondo transparente
-              icon: Icon(Icons.person),
-              label: 'Person',
-            ),
-          ],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(10.0),
+          ),
+          border: Border.all(
+            color: Colors.black,
+            width: 1.0,
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(10.0),
+          ),
+          child: BottomNavigationBar(
+            currentIndex: selectedIndex,
+            onTap: (int index) {
+              setState(() {
+                selectedIndex = index;
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => pages[index]),
+              );
+            },
+            unselectedItemColor: const Color.fromARGB(255, 104, 104, 104),
+            selectedItemColor: Colors.black,
+            items: [
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.home),
+                ),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.people),
+                ),
+                label: 'Patients',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.calendar_month),
+                ),
+                label: 'Appointments',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.video_collection),
+                ),
+                label: 'Treatments',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.person),
+                ),
+                label: 'Profile',
+              ),
+            ],
+          ),
         ),
       ),
     );

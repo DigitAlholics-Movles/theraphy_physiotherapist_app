@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theraphy_physiotherapist_app/data/model/appointment.dart';
 import 'package:theraphy_physiotherapist_app/data/model/patient.dart';
 import 'package:theraphy_physiotherapist_app/data/remote/http_helper.dart';
 import 'package:theraphy_physiotherapist_app/ui/patients/patient_details.dart';
+
+import '../appoitments/list_patients.dart';
+import '../home/home.dart';
+import '../profile/physiotherapist_profile.dart';
 
 class PatientsList extends StatefulWidget {
   const PatientsList({super.key});
@@ -16,11 +21,11 @@ class _PatientsListState extends State<PatientsList> {
   int currentUser = 3;
 
   List<Widget> pages = const [
+    HomePhysiotherapist(),
     PatientsList(),
+    ListAppointments(),
     PatientsList(),
-    PatientsList(),
-    PatientsList(),
-    PatientsList(),
+    PhysiotherapistProfile(),
   ];
 
   List<Patient>? patients = [];
@@ -30,7 +35,19 @@ class _PatientsListState extends State<PatientsList> {
   List<Patient>? filteredPatients = [];
   HttpHelper? httpHelper;
 
+  Future<int> getData(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? value = prefs.getString(key);
+    if (value != null) {
+    int? parsedValue = int.tryParse(value);
+    currentUser = parsedValue ?? 0;
+    }
+    return currentUser;
+    //print('Valor recuperado del almacenamiento local: $value');
+  }
+
   Future initialize() async {
+    currentUser = await getData("userId") as int;
     bool equalElement(int number) {
       if (myPatients != null) {
         for (var patient in myPatients!) {
@@ -89,6 +106,7 @@ class _PatientsListState extends State<PatientsList> {
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Column(
         children: [

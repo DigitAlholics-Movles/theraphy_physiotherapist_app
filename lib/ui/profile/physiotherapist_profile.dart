@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theraphy_physiotherapist_app/data/remote/http_helper.dart';
+import 'package:theraphy_physiotherapist_app/ui/initial_views/login.dart';
 
 import '../../data/model/physiotherapist.dart';
+import '../appoitments/list_patients.dart';
+import '../home/home.dart';
+import '../patients/patients_list.dart';
 
 class PhysiotherapistProfile extends StatefulWidget {
   const PhysiotherapistProfile({super.key});
@@ -16,16 +21,29 @@ class _PhysiotherapistProfileState extends State<PhysiotherapistProfile> {
   Physiotherapist? selectedPhysiotherapist;
   int userLogged = 1;
   int selectedIndex = 4;
- 
+
   List<Widget> pages = const [
-    PhysiotherapistProfile(),
-    PhysiotherapistProfile(),
-    PhysiotherapistProfile(),
-    PhysiotherapistProfile(),
+    HomePhysiotherapist(),
+    PatientsList(),
+    ListAppointments(),
+    PatientsList(),
     PhysiotherapistProfile(),
   ];
 
+  Future<int> getData(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? value = prefs.getString(key);
+    if (value != null) {
+      int? parsedValue = int.tryParse(value);
+      userLogged = parsedValue ?? 0;
+    }
+    return userLogged;
+    //print('Valor recuperado del almacenamiento local: $value');
+  }
+
   Future initialize() async {
+    userLogged = await getData("userId") as int;
+
     selectedPhysiotherapist =
         await httpHelper?.getPhysiotherapistById(userLogged);
     setState(() {
@@ -46,8 +64,13 @@ class _PhysiotherapistProfileState extends State<PhysiotherapistProfile> {
     if (selectedPhysiotherapist == null) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('My profile'),
+        title: const Text(
+          "My Patients",
+          style: TextStyle(color: Colors.black),
         ),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
         body: const Center(
           child: CircularProgressIndicator(),
         ),
@@ -57,77 +80,82 @@ class _PhysiotherapistProfileState extends State<PhysiotherapistProfile> {
           ProfileItem(physiotherapist: selectedPhysiotherapist!);
       return Scaffold(
         appBar: AppBar(
-          title: const Text('My profile'),
+        title: const Text(
+          "My Profile",
+          style: TextStyle(color: Colors.black),
         ),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
         body: profileItem,
         bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(10.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(10.0),
+            ),
+            border: Border.all(
+              color: Colors.black,
+              width: 1.0,
+            ),
           ),
-          border: Border.all(
-            color: Colors.black,
-            width: 1.0,
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(10.0),
+            ),
+            child: BottomNavigationBar(
+              currentIndex: selectedIndex,
+              onTap: (int index) {
+                setState(() {
+                  selectedIndex = index;
+                });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => pages[index]),
+                );
+              },
+              unselectedItemColor: const Color.fromARGB(255, 104, 104, 104),
+              selectedItemColor: Colors.black,
+              items: [
+                BottomNavigationBarItem(
+                  icon: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: const Icon(Icons.home),
+                  ),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: const Icon(Icons.people),
+                  ),
+                  label: 'Patients',
+                ),
+                BottomNavigationBarItem(
+                  icon: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: const Icon(Icons.calendar_month),
+                  ),
+                  label: 'Appointments',
+                ),
+                BottomNavigationBarItem(
+                  icon: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: const Icon(Icons.video_collection),
+                  ),
+                  label: 'Treatments',
+                ),
+                BottomNavigationBarItem(
+                  icon: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: const Icon(Icons.person),
+                  ),
+                  label: 'Profile',
+                ),
+              ],
+            ),
           ),
         ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(10.0),
-          ),
-          child: BottomNavigationBar(
-            currentIndex: selectedIndex,
-            onTap: (int index) {
-              setState(() {
-                selectedIndex = index;
-              });
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => pages[index]),
-              );
-            },
-            unselectedItemColor: const Color.fromARGB(255, 104, 104, 104),
-            selectedItemColor: Colors.black,
-            items: [
-              BottomNavigationBarItem(
-                icon: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: const Icon(Icons.home),
-                ),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: const Icon(Icons.people),
-                ),
-                label: 'Patients',
-              ),
-              BottomNavigationBarItem(
-                icon: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: const Icon(Icons.calendar_month),
-                ),
-                label: 'Appointments',
-              ),
-              BottomNavigationBarItem(
-                icon: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: const Icon(Icons.video_collection),
-                ),
-                label: 'Treatments',
-              ),
-              BottomNavigationBarItem(
-                icon: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: const Icon(Icons.person),
-                ),
-                label: 'Profile',
-              ),
-            ],
-          ),
-        ),
-      ),
       );
     }
   }
@@ -188,7 +216,7 @@ class _ProfileItemState extends State<ProfileItem> {
                   ),
                 ]),
                 const SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
                 Row(children: [
                   const Icon(Icons.school_outlined),
@@ -203,7 +231,7 @@ class _ProfileItemState extends State<ProfileItem> {
                   ),
                 ]),
                 const SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
                 Row(children: [
                   const Icon(Icons.email_outlined),
@@ -224,13 +252,21 @@ class _ProfileItemState extends State<ProfileItem> {
             height: 70,
           ),
           ElevatedButton(
-            onPressed: () {},
-            child: const Text('Edit'),
+            onPressed: () {
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          //////////////////
+                          //MARIAAAA AQUI PONES EL HOMEEEEEEE
+                          //////////////
+                          builder: (context) => const Login(),
+                        ));
+
+            },
+            child: const Text('Log Out'),
           ),
         ],
       ),
     );
   }
 }
-
-   

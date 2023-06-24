@@ -96,7 +96,7 @@ Future<List<Treatment>?> getTreatments() async {
 
   
 
-}
+
 
   Future<List<Physiotherapist>?> getPhysiotherapist() async {
     const String endpoint = '/physiotherapists'; // Ruta del endpoint específico
@@ -116,21 +116,22 @@ Future<List<Treatment>?> getTreatments() async {
     }
   }
 
-Future<List<Appointment>?> getAppointments() async {
-    const String endpoint = '/appointments';
-    final String url = '$urlBase$endpoint';
+  Future<List<User>?> getUsers() async {
+    const String endpoint = '/users'; // Ruta del endpoint específico
+    final String url = '$urlBase$endpoint'; // URL completo
 
     http.Response response = await http.get(Uri.parse(url));
 
-    if(response.statusCode == HttpStatus.ok){
+    if (response.statusCode == HttpStatus.ok) {
       final jsonResponse = json.decode(response.body);
-      final List<dynamic> appointmentsMap = jsonResponse['content'];
-      final List<Appointment> appointments = appointmentsMap.map((map) => Appointment.fromJson(map)).toList();
-      return appointments;
+      final List userMap = jsonResponse['content'];
+      final List<User> users =
+          userMap.map((map) => User.fromJson(map)).toList();
+      return users;
     } else {
       return null;
     }
-}
+  }
 
 
   Future<void> updatePost(String postId, String diagnosis) async {

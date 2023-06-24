@@ -420,7 +420,7 @@ class _SignUpState extends State<SignUp> {
                                       "2000-01-01",
                                       0,
                                       email,
-                                      users!.length + 1);
+                                      users![users!.length-1].id + 1);
                                 } else {
                                   String firstName = "";
                                   String paternalSurname = "";
@@ -444,7 +444,7 @@ class _SignUpState extends State<SignUp> {
                                       firstName,
                                       paternalSurname,
                                       maternalSurname,
-                                      "masajes en las patas que rico",
+                                      "Ginecologo-Urologo",
                                       18,
                                       "Lima",
                                       "https://pbs.twimg.com/media/EX1XRQGXgAArHrq.jpg",
@@ -452,7 +452,7 @@ class _SignUpState extends State<SignUp> {
                                       0,
                                       email,
                                       5,
-                                      users!.length + 1);
+                                      users![users!.length-1].id + 1);
                                 }
 
                                 Navigator.push(
