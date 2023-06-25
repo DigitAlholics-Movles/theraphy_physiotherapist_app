@@ -65,14 +65,14 @@ class _PhysiotherapistProfileState extends State<PhysiotherapistProfile> {
     if (selectedPhysiotherapist == null) {
       return Scaffold(
         appBar: AppBar(
-        title: const Text(
-          "My Patients",
-          style: TextStyle(color: Colors.black),
+          title: const Text(
+            "My Patients",
+            style: TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black),
+          elevation: 0,
         ),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
-        elevation: 0,
-      ),
         body: const Center(
           child: CircularProgressIndicator(),
         ),
@@ -82,15 +82,15 @@ class _PhysiotherapistProfileState extends State<PhysiotherapistProfile> {
           ProfileItem(physiotherapist: selectedPhysiotherapist!);
       return Scaffold(
         appBar: AppBar(
-        title: const Text(
-          "My Profile",
-          style: TextStyle(color: Colors.black),
+          title: const Text(
+            "My Profile",
+            style: TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black),
+          automaticallyImplyLeading: false,
+          elevation: 0,
         ),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
-        automaticallyImplyLeading: false,
-        elevation: 0,
-      ),
         body: profileItem,
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
@@ -257,15 +257,14 @@ class _ProfileItemState extends State<ProfileItem> {
           ),
           ElevatedButton(
             onPressed: () {
-                Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          //////////////////
-                          //MARIAAAA AQUI PONES EL HOMEEEEEEE
-                          //////////////
-                          builder: (context) => const Login(),
-                        ));
-
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    //////////////////
+                    //MARIAAAA AQUI PONES EL HOMEEEEEEE
+                    //////////////
+                    builder: (context) => const Login(),
+                  ));
             },
             child: const Text('Log Out'),
           ),
