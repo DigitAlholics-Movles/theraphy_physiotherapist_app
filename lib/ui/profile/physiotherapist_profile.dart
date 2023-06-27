@@ -7,6 +7,7 @@ import '../../data/model/physiotherapist.dart';
 import '../appoitments/list_patients.dart';
 import '../home/home.dart';
 import '../patients/patients_list.dart';
+import '../treatments/TreatmentSsessions.dart';
 
 class PhysiotherapistProfile extends StatefulWidget {
   const PhysiotherapistProfile({super.key});
@@ -22,11 +23,13 @@ class _PhysiotherapistProfileState extends State<PhysiotherapistProfile> {
   int userLogged = 1;
   int selectedIndex = 4;
 
+  ProfileItem? profileItem;
+
   List<Widget> pages = const [
     HomePhysiotherapist(),
     PatientsList(),
     ListAppointments(),
-    PatientsList(),
+    ListTreatments(),
     PhysiotherapistProfile(),
   ];
 
@@ -46,9 +49,14 @@ class _PhysiotherapistProfileState extends State<PhysiotherapistProfile> {
 
     selectedPhysiotherapist =
         await httpHelper?.getPhysiotherapistById(userLogged);
+
+     profileItem =
+          ProfileItem(physiotherapist: selectedPhysiotherapist!);
+
     setState(() {
-      physioterapists =
-          selectedPhysiotherapist != null ? [selectedPhysiotherapist!] : null;
+      // physioterapists =
+      //     selectedPhysiotherapist != null ? [selectedPhysiotherapist!] : null;
+      selectedPhysiotherapist = selectedPhysiotherapist;
     });
   }
 
@@ -61,32 +69,19 @@ class _PhysiotherapistProfileState extends State<PhysiotherapistProfile> {
 
   @override
   Widget build(BuildContext context) {
-    if (selectedPhysiotherapist == null) {
+    
+      
       return Scaffold(
         appBar: AppBar(
-        title: const Text(
-          "My Patients",
-          style: TextStyle(color: Colors.black),
-        ),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
-        body: const Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    } else {
-      ProfileItem profileItem =
-          ProfileItem(physiotherapist: selectedPhysiotherapist!);
-      return Scaffold(
-        appBar: AppBar(
-        title: const Text(
-          "My Profile",
-          style: TextStyle(color: Colors.black),
-        ),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
+          title: const Text(
+            "My Profile",
+            style: TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black),
+          automaticallyImplyLeading: false,
+          elevation: 0,
+        ),          
         body: profileItem,
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
@@ -159,11 +154,10 @@ class _PhysiotherapistProfileState extends State<PhysiotherapistProfile> {
       );
     }
   }
-}
 
 class ProfileItem extends StatefulWidget {
   const ProfileItem({super.key, required this.physiotherapist});
-  final Physiotherapist physiotherapist;
+  final Physiotherapist? physiotherapist;
 
   @override
   State<ProfileItem> createState() => _ProfileItemState();
@@ -184,7 +178,7 @@ class _ProfileItemState extends State<ProfileItem> {
               width: 320,
               height: 250,
               child: Image.network(
-                widget.physiotherapist.photoUrl,
+                widget.physiotherapist!.photoUrl,
                 fit: BoxFit.cover,
               ),
             ),
@@ -193,7 +187,7 @@ class _ProfileItemState extends State<ProfileItem> {
             height: 20,
           ),
           Text(
-            widget.physiotherapist.firstName,
+            widget.physiotherapist!.firstName,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
           ),
           const SizedBox(
@@ -208,7 +202,7 @@ class _ProfileItemState extends State<ProfileItem> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      widget.physiotherapist.birthdayDate,
+                      widget.physiotherapist!.birthdayDate,
                       textAlign: TextAlign.left,
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 25),
@@ -223,7 +217,7 @@ class _ProfileItemState extends State<ProfileItem> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      widget.physiotherapist.specialization,
+                      widget.physiotherapist!.specialization,
                       textAlign: TextAlign.left,
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 25),
@@ -238,7 +232,7 @@ class _ProfileItemState extends State<ProfileItem> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      widget.physiotherapist.email,
+                      widget.physiotherapist!.email,
                       textAlign: TextAlign.left,
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 25),
@@ -253,15 +247,14 @@ class _ProfileItemState extends State<ProfileItem> {
           ),
           ElevatedButton(
             onPressed: () {
-                Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          //////////////////
-                          //MARIAAAA AQUI PONES EL HOMEEEEEEE
-                          //////////////
-                          builder: (context) => const Login(),
-                        ));
-
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    //////////////////
+                    //MARIAAAA AQUI PONES EL HOMEEEEEEE
+                    //////////////
+                    builder: (context) => const Login(),
+                  ));
             },
             child: const Text('Log Out'),
           ),

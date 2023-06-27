@@ -9,6 +9,7 @@ import '../../data/model/patient.dart';
 import '../../data/model/physiotherapist.dart';
 import '../../data/model/treatment.dart';
 import '../../data/remote/http_helper.dart';
+import '../treatments/TreatmentSsessions.dart';
 
 class HomePhysiotherapist extends StatefulWidget {
   const HomePhysiotherapist({
@@ -29,13 +30,15 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
   int userLogged = 4;
   String physiotherapistName = '';
 
+  int? treatmentCount;
+
   int selectedIndex = 0;
 
   List<Widget> pages = const [
     HomePhysiotherapist(),
     PatientsList(),
     ListAppointments(),
-    PatientsList(),
+    ListTreatments(),
     PhysiotherapistProfile(),
   ];
 
@@ -96,25 +99,32 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
           .length;
 
       print('Number of patients: $patientCount');
-
+      print('Error al cargar la imagen: $userLogged');
       return filteredAppointments;
     }
     return null;
   }
 
-  int countTreatmentsByPhysiotherapistId(int physiotherapistId) {
-    if (treatments != null) {
-      int treatmentCount = treatments!
-          .where(
-              (treatment) => treatment.physiotherapist.id == physiotherapistId)
-          .length;
+  void countTreatmentsByPhysiotherapistId() async {
+      print('Number of patdfsdfs: ');
+      print('Error al cargar la imagen: $userLogged');
+      treatments= await httpHelper?.getTreatmentsByPhysiotherapistId(userLogged);
+      treatmentCount = (await httpHelper?.getTreatmentsByPhysiotherapistId(userLogged))?.length;
+      print('Number of patdfsdfs: $treatmentCount');
 
-      print(
-          'Number of treatments for physiotherapist $physiotherapistId: $treatmentCount');
+      treatments?.forEach((element) { print('Number of patdfsdfs: ${element.title}'); });
+    // if (treatments != null) {
+    //   int treatmentCount = treatments!
+    //       .where(
+    //           (treatment) => treatment.physiotherapistId == physiotherapistid)
+    //       .length;
 
-      return treatmentCount;
-    }
-    return 0;
+    //   print(
+    //       'Number of treatments for physiotherapist $physiotherapistid: $treatmentCount');
+
+    //   //return treatmentCount;
+    // }
+    // //return 0;
   }
 
   String getPhysiotherapistNameById(int physiotherapistId) {
@@ -127,6 +137,7 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
   void initState() {
     super.initState();
     httpHelper = HttpHelper();
+    countTreatmentsByPhysiotherapistId();
     initialize();
   }
 
@@ -135,7 +146,7 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
     List<Appointment>? filteredAppointments =
             getAndAppointmentsByPhysiotherapistId(userLogged),
         filteredAppointments2 = getPatientsByPhysiotherapistId(userLogged);
-    int treatmentCount = countTreatmentsByPhysiotherapistId(userLogged);
+    //treatmentCount = countTreatmentsByPhysiotherapistId(userLogged);
     // Filtrar citas para el fisioterapeuta con ID 1
     // String physiotherapistName = getPhysiotherapistNameById(userLogged); // Obtener el nombre del fisioterapeuta con ID 3
 
@@ -145,6 +156,7 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
             style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
+        elevation: 0,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,

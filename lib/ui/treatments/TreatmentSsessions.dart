@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:theraphy_physiotherapist_app/data/model/treatment.dart';
+import 'package:theraphy_physiotherapist_app/data/remote/http_helper.dart';
 import 'package:theraphy_physiotherapist_app/ui/treatments/NewTreatment.dart';
 import 'package:theraphy_physiotherapist_app/ui/treatments/TreatmenteInfo.dart';
 
-class Treatment {
-  final String title;
-  final int sessionsQuantity;
-  final String imageLink;
-  final String description;
-
-  Treatment({
-    required this.title,
-    required this.sessionsQuantity,
-    required this.imageLink,
-    required this.description,
-  });
-}
+import '../appoitments/list_patients.dart';
+import '../home/home.dart';
+import '../patients/patients_list.dart';
+import '../profile/physiotherapist_profile.dart';
 
 class ListTreatments extends StatefulWidget {
   const ListTreatments({Key? key}) : super(key: key);
@@ -25,14 +19,50 @@ class ListTreatments extends StatefulWidget {
 
 class _ListTreatmentsState extends State<ListTreatments> {
   String searchText = '';
-  int _currentIndex = 0;
+  int userLogged = 1;
+  int selectedIndex = 3;
 
-  List<Treatment> treatments = [
-    Treatment(title: 'Lesion de rodilla', sessionsQuantity: 10, imageLink: 'https://i.blogs.es/0710f8/650_1000_cinesiterapia/1366_2000.jpg', description: 'Una lesión de rodilla es un problema doloroso y limitante que afecta la articulación central de la pierna. Puede ser causada por movimientos bruscos, caídas o impactos directos en la rodilla. Los síntomas comunes incluyen dolor, hinchazón, rigidez y dificultad para mover la rodilla. El tratamiento puede incluir terapia física, medicamentos y, en casos graves, cirugía. Es importante buscar atención médica para obtener un diagnóstico preciso y un plan de tratamiento adecuado. El descanso, hielo, compresión y elevación pueden ayudar a controlar el dolor y la inflamación antes de recibir atención médica.'),
-    Treatment(title: 'Acupuntura', sessionsQuantity: 8, imageLink: 'https://www.il3.ub.edu/blog/wp-content/uploads/2021/09/iStock-1251542995.jpg', description: 'La terapia de acupuntura es una técnica utilizada por los fisioterapeutas para aliviar el dolor y promover la curación. Se insertan agujas delgadas en puntos específicos del cuerpo para estimular los mecanismos de autocuración del organismo. La acupuntura puede ser utilizada como complemento en el tratamiento de diversas condiciones musculoesqueléticas y dolor crónico.'),
-    Treatment(title: 'Vendaje neuromuscular', sessionsQuantity: 12, imageLink: 'https://www.virgendelalcazar.com/wp-content/uploads/2018/05/camilla_traccion.jpg', description: 'La terapia de vendaje neuromuscular, también conocida como kinesiotaping, es una técnica utilizada por los fisioterapeutas para proporcionar soporte, estabilidad y alivio del dolor en áreas específicas del cuerpo. Se aplican cintas elásticas especiales sobre la piel en patrones específicos para estimular la función muscular, mejorar la circulación y promover la recuperación.'),
-    Treatment(title: 'Electroterapia', sessionsQuantity: 6, imageLink: 'https://www.metropolsalud.com/wp-content/uploads/2021/07/diatermia.jpg', description: 'La electroterapia es una técnica que utiliza corrientes eléctricas de baja intensidad para aliviar el dolor, reducir la inflamación y promover la recuperación de lesiones. Los fisioterapeutas utilizan diferentes modalidades de electroterapia, como la estimulación muscular, la terapia de ondas de choque o la terapia con corrientes interferenciales, según las necesidades del paciente.'),
+  List<Treatment> treatments = [];
+
+  List<Widget> pages = const [
+    HomePhysiotherapist(),
+    PatientsList(),
+    ListAppointments(),
+    ListTreatments(),
+    PhysiotherapistProfile(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    loadTreatments(); // Carga los tratamientos al inicializar el estado
+  }
+
+  Future<int> getData(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? value = prefs.getString(key);
+    if (value != null) {
+      int? parsedValue = int.tryParse(value);
+      userLogged = parsedValue ?? 0;
+    }
+    return userLogged;
+    //print('Valor recuperado del almacenamiento local: $value');
+  }
+
+  Future<void> loadTreatments() async {
+    // Utiliza la clase HttpHelper para obtener los tratamientos
+    userLogged = await getData("userId") as int;
+    print('paraver:');
+    print('Error al cargar la imagen: $userLogged');
+    final httpHelper = HttpHelper();
+    final fetchedTreatments = await httpHelper.getTreatmentsByPhysiotherapistId(userLogged);
+
+    if (fetchedTreatments != null) {
+      setState(() {
+        treatments = fetchedTreatments;
+      });
+    }
+  }
 
   List<Treatment> get filteredTreatments {
     // Obtener la lista de tratamientos filtrados en función del texto de búsqueda
@@ -47,11 +77,29 @@ class _ListTreatmentsState extends State<ListTreatments> {
     }
   }
 
+  Future<void> addNewTreatment() async {
+    final newTreatment = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NewTreatment(userLogged: userLogged),
+      ),
+    );
+
+    if (newTreatment != null) {
+      setState(() {
+        treatments.add(newTreatment);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Treatments Sessions'),
+        title: const Text('My Treatments Sessions', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -99,18 +147,7 @@ class _ListTreatmentsState extends State<ListTreatments> {
                 Container(
                   margin: const EdgeInsets.all(16.0),
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const NewTreatment()),
-                      ).then((newTreatment) {
-                        if (newTreatment != null) {
-                          setState(() {
-                            treatments.add(newTreatment);
-                          });
-                        }
-                      });
-                    },
+                    onPressed: addNewTreatment, // Utiliza el método addNewTreatment
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.all(16.0),
                       shape: RoundedRectangleBorder(
@@ -128,44 +165,72 @@ class _ListTreatmentsState extends State<ListTreatments> {
           ],
         ),
       ),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(10.0),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(10.0),
+          ),
+          border: Border.all(
+            color: Colors.black,
+            width: 1.0,
+          ),
         ),
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (int index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          items: const [
-            BottomNavigationBarItem(
-              backgroundColor: Colors.transparent,
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.transparent,
-              icon: Icon(Icons.people),
-              label: 'People',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.transparent,
-              icon: Icon(Icons.calendar_today),
-              label: 'Calendar',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.transparent,
-              icon: Icon(Icons.video_settings),
-              label: 'Video',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.transparent,
-              icon: Icon(Icons.person),
-              label: 'Person',
-            ),
-          ],
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(10.0),
+          ),
+          child: BottomNavigationBar(
+            currentIndex: selectedIndex,
+            onTap: (int index) {
+              setState(() {
+                selectedIndex = index;
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => pages[index]),
+              );
+            },
+            unselectedItemColor: const Color.fromARGB(255, 104, 104, 104),
+            selectedItemColor: Colors.black,
+            items: [
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.home),
+                ),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.people),
+                ),
+                label: 'Patients',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.calendar_month),
+                ),
+                label: 'Appointments',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.video_collection),
+                ),
+                label: 'Treatments',
+              ),
+              BottomNavigationBarItem(
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Icon(Icons.person),
+                ),
+                label: 'Profile',
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -198,7 +263,7 @@ class TreatmentItem extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(5.0), // Ajusta el radio de borde según tus necesidades
                 child: Image.network(
-                  treatment.imageLink,
+                  treatment.photoUrl,
                   height: 90,
                 ),
               ),
@@ -225,7 +290,7 @@ class TreatmentItem extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => TreatmentInfo(treatmentName: treatment.title, treatmentImage: treatment.imageLink, treatmentDescription: treatment.description)),
+                  MaterialPageRoute(builder: (context) => TreatmentInfo(treatmentName: treatment.title, treatmentImage: treatment.photoUrl, treatmentDescription: treatment.description)),
                 );
               },
               child: const Text('Información'),
@@ -236,4 +301,3 @@ class TreatmentItem extends StatelessWidget {
     );
   }
 }
-
