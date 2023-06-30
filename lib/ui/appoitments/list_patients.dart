@@ -177,7 +177,8 @@ class _ListAppointmentsState extends State<ListAppointments> {
                                   ),
                                   borderRadius: BorderRadius.circular(5.0),
                                 ),
-                                child: Text(appointments![index].topic),
+                                child: Text((appointments![index].topic.length > 12 ? 
+                                appointments![index].topic.replaceRange(10, appointments![index].topic.length,"...") : appointments![index].topic)),
                               ),
                               const SizedBox(
                                 width: 10,
