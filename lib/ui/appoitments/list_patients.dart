@@ -54,6 +54,16 @@ class _ListAppointmentsState extends State<ListAppointments> {
     currentUser = await getData("userId") as int;
 
     // ignore: sdk_version_since
+    bool equalElement(int number) {
+      if (myAppointments != null) {
+        for (var patient in myAppointments!) {
+          if (patient.id == number) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
     patients = List.empty();
     patients = await httpHelper?.getPatients();
     setState(() {
@@ -69,7 +79,13 @@ class _ListAppointmentsState extends State<ListAppointments> {
 
     appointments?.forEach((appointment) {
       if (appointment.physiotherapist.id == currentUser) {
-        myAppointments?.add(appointment);
+        patients?.forEach((patient) {
+          if (patient.id == appointment.patient.id &&
+              equalElement(patient.id)) {
+            myAppointments?.add(appointment);
+          }
+        });
+        
       }
     });
 
@@ -77,6 +93,9 @@ class _ListAppointmentsState extends State<ListAppointments> {
 
     //filteredPatients = myPatients;
   }
+
+  TextEditingController searchController =
+      TextEditingController();
 
   @override
   void initState() {
@@ -114,7 +133,12 @@ class _ListAppointmentsState extends State<ListAppointments> {
             TextField(
               onChanged: (value) {
                 setState(() {
-                  searchText = value;
+                   appointments = myAppointments
+                        ?.where((patient) =>
+                            ('${patient.patient.firstName} ${patient.patient.lastName}')
+                                .toLowerCase()
+                                .contains(value.toLowerCase()))
+                        .toList();
                 });
               },
               decoration: InputDecoration(
@@ -132,10 +156,10 @@ class _ListAppointmentsState extends State<ListAppointments> {
             const SizedBox(height: 16.0),
             Expanded(
               child: ListView.builder(
-                itemCount: appointments!.length,
+                itemCount: appointments?.length,
                 // separatorBuilder: (BuildContext context, int index) =>
                 //     const Divider(),
-                itemBuilder: (BuildContext context, int index) {
+                itemBuilder: (context, index)  {
                   return SizedBox(
                     height: 100.0, // Altura deseada de las tarjetas
                     child: Card(
