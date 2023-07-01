@@ -12,44 +12,53 @@ class TreatmentInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(treatmentName, style: TextStyle(color: Colors.black)),backgroundColor: Colors.white,
+        title: Text(treatmentName, style: const TextStyle(color: Colors.black)),backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Center(
-              child: Image.network(
-                treatmentImage,
-                height: 200, // Adjust the image height according to your needs
-                width: 400, // Adjust the image width according to your needs
-                fit: BoxFit.contain, // Ensure the image fits within the specified dimensions
-              ),
-            ),
-            const SizedBox(height: 25),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'Description',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+            ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: SizedBox(
+                  width: 330,
+                  height: 250,
+                  child: Image.network(
+                    treatmentImage,
+                    fit: BoxFit.cover,
                   ),
-                  textAlign: TextAlign.left, // Align the text to the left
                 ),
-              ],
+              ),
+            const SizedBox(height: 25),
+            const Padding(
+              padding:  EdgeInsets.only(left: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'Description',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.left, // Align the text to the left
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 20),
-            Text(
-              treatmentDescription,
-              style: TextStyle(
-                fontSize: 16,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                treatmentDescription,
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
+                textAlign: TextAlign.justify,
               ),
-              textAlign: TextAlign.justify,
             ),
           ],
         ),

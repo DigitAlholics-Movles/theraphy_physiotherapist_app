@@ -137,7 +137,7 @@ class _ListAppointmentsState extends State<ListAppointments> {
                 //     const Divider(),
                 itemBuilder: (BuildContext context, int index) {
                   return SizedBox(
-                    height: 120.0, // Altura deseada de las tarjetas
+                    height: 100.0, // Altura deseada de las tarjetas
                     child: Card(
                       color: const Color(0xFFC762FF),
                       child: Container(
@@ -155,7 +155,11 @@ class _ListAppointmentsState extends State<ListAppointments> {
                                   .start, // Centra los elementos horizontalmente
                               children: [
                                 Text(
-                                    "${appointments![index].patient.firstName} ${appointments![index].patient.lastName}"),
+                                  "${appointments![index].patient.firstName} ${appointments![index].patient.lastName}",
+                                  style: const TextStyle(
+                                    color: Colors.white, // Color blanco
+                                  ),
+                                ),
 
                                 const SizedBox(
                                   width: 10,

@@ -44,22 +44,20 @@ class _PatientDetailsState extends State<PatientDetails> {
       body: Column(
         children: [
           const SizedBox(height: 20),
-          Center(
-            child: Container(
-              constraints: const BoxConstraints(
-                minWidth: 200.0,
-                minHeight: 200.0, // Establece el ancho mínimo deseado
-                maxWidth: 200.0,
-                maxHeight: 200.0, // Establece el ancho máximo deseado
-              ),
-              child:  Image(
-                image: NetworkImage(
-                  widget.patient.photoUrl
+         
+             
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: SizedBox(
+                  width: 330,
+                  height: 250,
+                  child: Image.network(
+                    widget.patient.photoUrl,
+                    fit: BoxFit.cover,
                   ),
-                fit: BoxFit.cover, // Ajusta la imagen al tamaño del contenedor
+                ),
               ),
-            ),
-          ),
+            
 
           const SizedBox(height: 20),
           Center(
@@ -73,7 +71,7 @@ class _PatientDetailsState extends State<PatientDetails> {
                   padding: const EdgeInsets.all(10),
                   constraints: const BoxConstraints(
                     minWidth:
-                        300, // Establece el ancho máximo deseado para el cuadro
+                        330, // Establece el ancho máximo deseado para el cuadro
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +102,7 @@ class _PatientDetailsState extends State<PatientDetails> {
                   padding: const EdgeInsets.all(10),
                   constraints: const BoxConstraints(
                     minWidth:
-                        300, // Establece el ancho máximo deseado para el cuadro
+                        330, // Establece el ancho máximo deseado para el cuadro
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +133,7 @@ class _PatientDetailsState extends State<PatientDetails> {
                   padding: const EdgeInsets.all(10),
                   constraints: const BoxConstraints(
                     minWidth:
-                        300, // Establece el ancho máximo deseado para el cuadro
+                        330, // Establece el ancho máximo deseado para el cuadro
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +164,7 @@ class _PatientDetailsState extends State<PatientDetails> {
                   padding: const EdgeInsets.all(10),
                   constraints: const BoxConstraints(
                     minWidth:
-                        300, // Establece el ancho máximo deseado para el cuadro
+                        330, // Establece el ancho máximo deseado para el cuadro
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,7 +201,7 @@ class _PatientDetailsState extends State<PatientDetails> {
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     backgroundColor: Colors.blue,
                     padding: const EdgeInsets.symmetric(
