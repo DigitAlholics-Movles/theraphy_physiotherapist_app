@@ -303,7 +303,7 @@ class _LoginState extends State<Login> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: Text(
+                      child: const Text(
                         "Log In",
                         style: TextStyle(
                           fontSize: 18,
@@ -312,20 +312,20 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     children: [
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 20),
-                          child: Divider(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          child: const Divider(
                             color: Colors.black,
                             thickness: 2, // Grosor de las líneas
                             height: 20,
                           ),
                         ),
                       ),
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
                           "Or",
@@ -337,8 +337,8 @@ class _LoginState extends State<Login> {
                       ),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 20),
-                          child: Divider(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          child: const Divider(
                             color: Colors.black,
                             thickness: 2, // Grosor de las líneas
                             height: 20,
@@ -347,12 +347,12 @@ class _LoginState extends State<Login> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
+                 const  SizedBox(height: 10),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Container(
                       width: double.infinity,
-                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
                       child: ElevatedButton(
                         onPressed: () {
                           // Acción a realizar al presionar el botón
@@ -360,13 +360,13 @@ class _LoginState extends State<Login> {
                         style: ElevatedButton.styleFrom(
                           primary: Colors.blue[700], // Color de fondo
                           onPrimary: Colors.white, // Color del texto
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               vertical: 20), // Padding vertical del botón
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        child: Text(
+                        child:const Text(
                           "Log in with Google",
                           style: TextStyle(
                             fontSize: 18,
@@ -378,7 +378,7 @@ class _LoginState extends State<Login> {
                   ),
                   Container(
                     alignment: Alignment.center,
-                    margin: EdgeInsets.symmetric(vertical: 20),
+                    margin: const EdgeInsets.symmetric(vertical: 10),
                     child: TextButton(
                       onPressed: () {
                         Navigator.push(
@@ -389,7 +389,7 @@ class _LoginState extends State<Login> {
                         // Acción a realizar al presionar el botón
                       },
                       child: RichText(
-                        text: TextSpan(
+                        text: const TextSpan(
                           text: "New to Therapy? ",
                           style: TextStyle(
                             fontSize: 16,
