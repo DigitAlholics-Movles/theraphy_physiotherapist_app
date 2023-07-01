@@ -159,7 +159,7 @@ class _ListAppointmentsState extends State<ListAppointments> {
                 itemCount: appointments?.length,
                 // separatorBuilder: (BuildContext context, int index) =>
                 //     const Divider(),
-                itemBuilder: (context, index)  {
+                itemBuilder: (BuildContext context, int index) {
                   return SizedBox(
                     height: 100.0, // Altura deseada de las tarjetas
                     child: Card(
@@ -274,7 +274,8 @@ class _ListAppointmentsState extends State<ListAppointments> {
                       ),
                     ),
                   );
-                },
+                  }
+                
               ),
             ),
           ],

@@ -291,7 +291,7 @@ class TreatmentItem extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: Text('Quantity Sessions: ${treatment.sessionsQuantity}'),
+                child: Text('N° of Sessions: ${treatment.sessionsQuantity}'),
               ),
               
               ElevatedButton(
