@@ -136,7 +136,8 @@ class _ListAppointmentsState extends State<ListAppointments> {
                 // separatorBuilder: (BuildContext context, int index) =>
                 //     const Divider(),
                 itemBuilder: (BuildContext context, int index) {
-                  return SizedBox(
+                  if(("${appointments![index].patient.firstName} ${appointments![index].patient.lastName}").toLowerCase().contains(searchText.toLowerCase())) {
+                    return SizedBox(
                     height: 100.0, // Altura deseada de las tarjetas
                     child: Card(
                       color: const Color(0xFFC762FF),
@@ -250,6 +251,7 @@ class _ListAppointmentsState extends State<ListAppointments> {
                       ),
                     ),
                   );
+                  }
                 },
               ),
             ),
