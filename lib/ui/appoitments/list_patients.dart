@@ -38,8 +38,8 @@ class _ListAppointmentsState extends State<ListAppointments> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? value = prefs.getString(key);
     if (value != null) {
-    int? parsedValue = int.tryParse(value);
-    currentUser = parsedValue ?? 0;
+      int? parsedValue = int.tryParse(value);
+      currentUser = parsedValue ?? 0;
     }
     return currentUser;
     //print('Valor recuperado del almacenamiento local: $value');
@@ -52,9 +52,6 @@ class _ListAppointmentsState extends State<ListAppointments> {
 
   Future initialize() async {
     currentUser = await getData("userId") as int;
-
-
-    
 
     // ignore: sdk_version_since
     patients = List.empty();
@@ -140,8 +137,9 @@ class _ListAppointmentsState extends State<ListAppointments> {
                 //     const Divider(),
                 itemBuilder: (BuildContext context, int index) {
                   return SizedBox(
-                    height: 120.0, // Altura deseada de las tarjetas
+                    height: 100.0, // Altura deseada de las tarjetas
                     child: Card(
+                      color: const Color(0xFFC762FF),
                       child: Container(
                         alignment: Alignment.center, // Centra el contenido
                         child: ListTile(
@@ -156,8 +154,13 @@ class _ListAppointmentsState extends State<ListAppointments> {
                               mainAxisAlignment: MainAxisAlignment
                                   .start, // Centra los elementos horizontalmente
                               children: [
-                                Text("${appointments![index].patient.firstName} ${appointments![index].patient.lastName}"),
-                               
+                                Text(
+                                  "${appointments![index].patient.firstName} ${appointments![index].patient.lastName}",
+                                  style: const TextStyle(
+                                    color: Colors.white, // Color blanco
+                                  ),
+                                ),
+
                                 const SizedBox(
                                   width: 10,
                                 ), // Espacio entre los elementos
@@ -171,14 +174,46 @@ class _ListAppointmentsState extends State<ListAppointments> {
                               Container(
                                 padding: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
+                                  color: Colors.white, // Color de fondo blanco
                                   border: Border.all(
-                                    color: Colors.black,
+                                    color: Colors.white,
                                     width: 1.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(5.0),
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                child: Text((appointments![index].topic.length > 12 ? 
-                                appointments![index].topic.replaceRange(10, appointments![index].topic.length,"...") : appointments![index].topic)),
+                                child: Text(
+                                    (appointments![index].topic.length > 12
+                                        ? appointments![index]
+                                            .topic
+                                            .replaceRange(
+                                                10,
+                                                appointments![index]
+                                                    .topic
+                                                    .length,
+                                                "...")
+                                        : appointments![index].topic),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13)),
+                              ),
+
+                              const SizedBox(
+                                width: 10,
+                              ), // Espacio entre los elementos
+                              Container(
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Text(appointments![index].scheduledDate,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13)),
                               ),
                               const SizedBox(
                                 width: 10,
@@ -186,27 +221,17 @@ class _ListAppointmentsState extends State<ListAppointments> {
                               Container(
                                 padding: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
+                                  color: Colors.white,
                                   border: Border.all(
-                                    color: Colors.black,
+                                    color: Colors.white,
                                     width: 1.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(5.0),
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                child: Text(appointments![index].scheduledDate),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ), // Espacio entre los elementos
-                              Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.black,
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                child: const Text('4pm'),
+                                child: const Text('4pm',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13)),
                               ),
                             ],
                           ),
@@ -231,7 +256,7 @@ class _ListAppointmentsState extends State<ListAppointments> {
           ],
         ),
       ),
-     bottomNavigationBar: Container(
+      bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: const BorderRadius.vertical(
@@ -416,164 +441,173 @@ class _MyAppointmentState extends State<MyAppointment> {
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: Image.network(
-                widget.appointment.patient.photoUrl,
-                width: 250,
-                height: 250,
-              ),
-            ),
-            const SizedBox(height: 50),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black,
-                  width: 2.0,
-                ),
+      body: Padding(
+        padding: const EdgeInsets.all(25.0),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
+                child: SizedBox(
+                  width: 330,
+                  height: 250,
+                  child: Image.network(
+                    widget.appointment.patient.photoUrl,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-              child: Row(
+              const SizedBox(height: 30),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE0D6D6),
+                  border: Border.all(
+                    color: const Color(0xFFE0D6D6),
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      widget.appointment.patient.firstName,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      widget.appointment.patient.lastName,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    widget.appointment.patient.firstName,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    widget.appointment.patient.lastName,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    const Text(
-                      'Topic',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 10),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Text(
-                        widget.appointment.topic,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  children: [
-                    const Text(
-                      'Date',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 10),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Text(
-                        widget.appointment.scheduledDate,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  children: [
-                    const Text(
-                      'Time',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 10),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: const Text(
-                        '4pm',
+                  Column(
+                    children: [
+                      const Text(
+                        'Topic',
                         style: TextStyle(fontSize: 16),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.all(10),
-              width: double.infinity, // Ocupar todo el ancho disponible
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Diagnosis',
-                    style: TextStyle(fontSize: 16),
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE0D6D6),
+                          border: Border.all(
+                            color: const Color(0xFFE0D6D6),
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Text(
+                          widget.appointment.topic,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 2.0,
+                  Column(
+                    children: [
+                      const Text(
+                        'Date',
+                        style: TextStyle(fontSize: 16),
                       ),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: TextField(
-                      controller: _textFieldController,
-                      decoration: const InputDecoration(
-                        hintText: 'Ingrese el texto',
-                        border: InputBorder.none,
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE0D6D6),
+                          border: Border.all(
+                            color: const Color(0xFFE0D6D6),
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Text(
+                          widget.appointment.scheduledDate,
+                          style: const TextStyle(fontSize: 16),
+                        ),
                       ),
-                    ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      const Text(
+                        'Time',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE0D6D6),
+                          border: Border.all(
+                            color: const Color(0xFFE0D6D6),
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: const Text(
+                          '4pm',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                _handleButtonPress();
-                Navigator.pop(context);
-              },
-              child: const Text('Save'),
-            ),
-          ],
+              const SizedBox(height: 20),
+              Container(
+                padding: const EdgeInsets.all(0),
+                width: double.infinity, // Ocupar todo el ancho disponible
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Diagnosis',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: TextField(
+                        controller: _textFieldController,
+                        decoration: const InputDecoration(
+                          hintText: 'Ingrese el texto',
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  _handleButtonPress();
+                  Navigator.pop(context);
+                },
+                child: const Text('Save'),
+              ),
+            ],
+          ),
         ),
       ),
-        );
+    );
   }
 }

@@ -106,13 +106,17 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
   }
 
   void countTreatmentsByPhysiotherapistId() async {
-      print('Number of patdfsdfs: ');
-      print('Error al cargar la imagen: $userLogged');
-      treatments= await httpHelper?.getTreatmentsByPhysiotherapistId(userLogged);
-      treatmentCount = (await httpHelper?.getTreatmentsByPhysiotherapistId(userLogged))?.length;
-      print('Number of patdfsdfs: $treatmentCount');
+    print('Number of patdfsdfs: ');
+    print('Error al cargar la imagen: $userLogged');
+    treatments = await httpHelper?.getTreatmentsByPhysiotherapistId(userLogged);
+    treatmentCount =
+        (await httpHelper?.getTreatmentsByPhysiotherapistId(userLogged))
+            ?.length;
+    print('Number of patdfsdfs: $treatmentCount');
 
-      treatments?.forEach((element) { print('Number of patdfsdfs: ${element.title}'); });
+    treatments?.forEach((element) {
+      print('Number of patdfsdfs: ${element.title}');
+    });
     // if (treatments != null) {
     //   int treatmentCount = treatments!
     //       .where(
@@ -146,6 +150,7 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
     List<Appointment>? filteredAppointments =
             getAndAppointmentsByPhysiotherapistId(userLogged),
         filteredAppointments2 = getPatientsByPhysiotherapistId(userLogged);
+
     //treatmentCount = countTreatmentsByPhysiotherapistId(userLogged);
     // Filtrar citas para el fisioterapeuta con ID 1
     // String physiotherapistName = getPhysiotherapistNameById(userLogged); // Obtener el nombre del fisioterapeuta con ID 3
@@ -153,140 +158,172 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Hello, $physiotherapistName",
-            style: TextStyle(color: Colors.black)),
+            style: const TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         elevation: 0,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 15, top: 25, bottom: 5),
-            child: Text(
-              'Today appointments',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Card(
-                color: const Color(0xFFC762FF),
-                child: filteredAppointments != null &&
-                        filteredAppointments.isNotEmpty
-                    ? ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: filteredAppointments.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 10.0),
-                            child: CardItem(
-                                appointment: filteredAppointments[index]),
-                          );
-                        },
-                      )
-                    : const Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 10.0,
-                            horizontal:
-                                10.0), // Ajusta el valor vertical según tus necesidades
-                        child: Center(
-                          child: Text('You don\'t have appointments',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20)),
-                        ),
-                      )),
-          ),
-          const SizedBox(height: 10.0),
-          SizedBox(
-            height: 160,
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(1.0),
-                      child: Card(
-                        color: const Color.fromARGB(0, 193, 168, 212),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(25.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                '${getPatientsByPhysiotherapistId(userLogged)?.length ?? 0}',
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 40),
+      body: CustomScrollView(
+        slivers: [
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                const Padding(
+                  padding: EdgeInsets.only(left: 15, top: 25, bottom: 5),
+                  child: Text(
+                    'Today appointments',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Card(
+                    color: const Color(0xFFC762FF),
+                    child: filteredAppointments != null &&
+                            filteredAppointments.isNotEmpty
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: filteredAppointments.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 10.0),
+                                child: CardItem(
+                                    appointment: filteredAppointments[index]),
+                              );
+                            },
+                          )
+                        : const Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10.0,
+                                horizontal:
+                                    10.0), // Ajusta el valor vertical según tus necesidades
+                            child: Center(
+                              child: Text(
+                                'You don\'t have appointments',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 20),
                               ),
-                              const SizedBox(
-                                height: 5,
+                            ),
+                          ),
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                SizedBox(
+                  height: 160,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(1.0),
+                            child: Container(
+                              decoration: BoxDecoration(boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.shade200,
+                                  spreadRadius: 3,
+                                  blurRadius: 9,
+                                  offset: const Offset(0,5),
+                                ),
+                               
+                              ]),
+                              child: Card(
+                                color: const Color.fromARGB(0, 193, 168, 212),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(25.0),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        '${getPatientsByPhysiotherapistId(userLogged)?.length ?? 0}',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 40,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      const Text('Patients count'),
+                                    ],
+                                  ),
+                                ),
                               ),
-                              const Text('Patients count'),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(1.0),
-                      child: Card(
-                        color: const Color.fromARGB(0, 193, 168, 212),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(25.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                '$treatmentCount',
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 40),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(1.0),
+
+                            child: Container(
+                              decoration: BoxDecoration(boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.shade200,
+                                  spreadRadius: 3,
+                                  blurRadius: 9,
+                                  offset: const Offset(0,5),
+                                ),
+                              ]),
+                              child: Card(
+                                color: const Color.fromARGB(0, 193, 168, 212),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(25.0),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        '$treatmentCount',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 40),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      const Text('Treatments count'),
+                                    ],
+                                  ),
+                                ),
                               ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              const Text('Treatments count'),
-                            ],
+                            ),
+                          )//container
                           ),
-                        ),
-                      ),
+                        
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 10.0),
+                const Padding(
+                  padding: EdgeInsets.only(left: 15, top: 25, bottom: 5),
+                  child: Text(
+                    'My patients',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 10.0),
-          const Padding(
-            padding: EdgeInsets.only(left: 15, top: 25, bottom: 5),
-            child: Text(
-              'My patients',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10.0,
+                      horizontal:
+                          10.0), // Ajusta el valor vertical según tus necesidades
+                  child: PatientItemByPhysitoherapist(
+                      appointment: filteredAppointments2![index]),
+                );
+              },
+              childCount: filteredAppointments2?.length ?? 0,
             ),
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: filteredAppointments2?.length ?? 0,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal:
-                        10.0), // Ajusta el valor vertical según tus necesidades
-                child: PatientItemByPhysitoherapist(
-                    appointment: filteredAppointments2![index]),
-              );
-            },
           ),
         ],
       ),
@@ -360,56 +397,6 @@ class _HomePhysiotherapistState extends State<HomePhysiotherapist> {
       ),
     );
   }
-
-  /*@override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Hello, Cristhian'),
-      ),
-      body:  Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 15, top: 25, bottom: 5),
-            child: Text(
-              'Today appointments',
-              style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 20
-              ),
-            ),
-          ),
-          ListView.builder(
-              itemCount: appointments?.length,
-              itemBuilder: (context, index){
-                return CardItem(appointment: appointments![index]);
-              } ,)
-          */
-  /*const  SizedBox(
-            child: ContainerItem(),
-          ),
-         const Padding(
-            padding: EdgeInsets.only(left: 15, top: 25, bottom: 5),
-            child: Text(
-              'My patients',
-              style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 20
-              ),
-            ),
-          ),
-         const SizedBox(
-            child: PatientItem(),
-          ),
-        const  SizedBox(
-            child: PatientItem(),
-          ),
-         const Spacer(),
-         const SizedBox(
-            child: PatientItem(),
-          ),*/
-  // ],
-  //),
 }
 
 class PatientItemByPhysitoherapist extends StatefulWidget {
@@ -488,200 +475,5 @@ class _CardItemState extends State<CardItem> {
         ),
       ],
     );
-
-    /*ListTile(
-          title: Text(widget.appointment.topic),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(widget.appointment.diagnosis),
-              Text(widget.appointment.scheduledDate),
-            ],
-          ),
-      );*/
-
-    /*Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Card(
-        color: const Color(0xFFC762FF),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: const Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Row(
-                children: <Widget>[
-                  Icon(Icons.notifications_none_outlined),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Text('Patient name 1', textAlign: TextAlign.left),
-                  ),
-                  Expanded(
-                    child: Text(
-                      '00:00',
-                      textAlign: TextAlign.right,
-                    ),
-                  ),
-                ],
-              ),
-                            
-            ],
-          ),
-        ),
-      ),
-    );*/
   }
 }
-
-/*class ContainerItem extends StatefulWidget {
-  const ContainerItem({super.key,});
-
-  @override
-  State<ContainerItem> createState() => _ContainerItemState();
-}
-
-class _ContainerItemState extends State<ContainerItem> {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 160,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: Card(
-                  color: const Color.fromARGB(0, 193, 168, 212),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(25.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          '15',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 40),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text('Patients count'),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding:  const EdgeInsets.all(1.0),
-                child: Card(
-                  color: const Color.fromARGB(0, 193, 168, 212),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(25.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          '15',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 40),
-                        ),
-                        
-                         SizedBox(
-                          height: 5,
-                        ),
-                         Text('Treatments count'),
-                    
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  
-  }
-}
-
-
-class PatientList extends StatefulWidget {
-  const PatientList({super.key});
-
-  @override
-  State<PatientList> createState() => _PatientListState();
-}
-
-class _PatientListState extends State<PatientList> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('AppSuperZound'),
-      ),
-      body: const Column(
-        children: [
-          Text('adsafs')
-        ],
-        /*itemBuilder: (context, index) {
-          //return PatientItem(album: albums![index]);
-        },*/
-      ),
-    );
-  }
-}
-
-
-
-class PatientItem extends StatefulWidget {
-  const PatientItem({super.key});
-
-  @override
-  State<PatientItem> createState() => _PatientList2State();
-}
-
-class _PatientList2State extends State<PatientItem> {
-  @override
-  Widget build(BuildContext context) {
-    return  Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Card(
-        color: const Color.fromARGB(243, 22, 50, 209),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 2.0, top: 15.0, bottom: 15.0),
-          child: ListTile(
-              leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: Image.network(
-                            'https://static.vecteezy.com/system/resources/previews/004/759/418/original/cute-astronaut-with-star-and-moon-free-vector.jpg',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      title: const Text('adsf'),
-          ),
-        ),
-      ),
-      
-    );
-  }
-}*/

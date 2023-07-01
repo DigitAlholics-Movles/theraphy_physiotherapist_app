@@ -107,14 +107,14 @@ class _PatientsListState extends State<PatientsList> {
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
         automaticallyImplyLeading: false,
         elevation: 0,
       ),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(4, 40, 4, 20),
+            padding: const EdgeInsets.all(22.0),
             // ignore: sized_box_for_whitespace
             child: Container(
               width: 360, // Establece el ancho deseado
@@ -253,7 +253,7 @@ class _PatientItemState extends State<PatientItem> {
             children: [
               const SizedBox(height: 8),
               SizedBox(
-                width: 80,
+                width: 60,
                 height: 30, // Establece el ancho deseado para el botón
                 child: ElevatedButton(
                   onPressed: () {
@@ -274,7 +274,7 @@ class _PatientItemState extends State<PatientItem> {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(5.0),
                     child: Text(
                       "Age: ${widget.patient.age}",
                       style: const TextStyle(
@@ -307,10 +307,12 @@ class _PatientItemState extends State<PatientItem> {
                     backgroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
+                      
                     ),
+                     minimumSize: const Size(10, double.infinity),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(5.0),
                     child: Text(
                       "N Appointments: ${widget.patient.appointmentQuantity}",
                       style: const TextStyle(
