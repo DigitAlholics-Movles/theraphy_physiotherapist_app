@@ -140,6 +140,7 @@ class _ListAppointmentsState extends State<ListAppointments> {
                                 .contains(value.toLowerCase()))
                         .toList();
                 });
+                //
               },
               decoration: InputDecoration(
                 labelText: 'Buscar',
